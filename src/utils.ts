@@ -1,24 +1,21 @@
 import axios from 'axios'
-import { ENCRYPTION_KEY, FIREBASE_API_KEY, STORAGE_FILE } from './config'
+import { API_URL, ENCRYPTION_KEY, STORAGE_FILE } from './config'
 import * as fs from 'fs'
 import * as path from 'path'
 import SimpleCrypto from 'simple-crypto-js'
 
 const simpleCrypto = new SimpleCrypto(ENCRYPTION_KEY)
 
-export const loginWithFirebase = async (
+export const login = async (
     email: string,
     password: string
 ): Promise<{ data?: any; error?: any }> => {
     try {
-        const data = await axios.post(
-            `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${FIREBASE_API_KEY}`,
-            {
-                email,
-                password,
-                returnSecureToken: true,
-            }
-        )
+        const data = await axios.post(`${API_URL}/api/v1/login`, {
+            email,
+            password,
+            returnSecureToken: true,
+        })
         return { data, error: '' }
     } catch (e) {
         return { error: e }

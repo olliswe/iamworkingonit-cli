@@ -1,34 +1,35 @@
-import { Command } from '@oclif/command'
+import { Command, flags } from '@oclif/command'
 import cli from 'cli-ux'
-import { loginWithFirebase, readFromStorage, writeToStorage } from '../utils'
-import * as inquirer from 'inquirer'
-
-const TEAMS = [
-    {
-        name: 'LivingPackets',
-        value: '0934rjwer',
-    },
-    { name: 'I Am Working On It', value: 'weoifjwoi' },
-]
+import { login, writeToStorage } from '../utils'
 
 export default class Login extends Command {
     static description = 'Login to your account'
 
-    static examples = []
+    static examples = ['$ workingon login', '$ workingon login --signup']
 
-    static flags = {}
+    static flags = {
+        signup: flags.boolean({ description: 'Sign up as new user' }),
+    }
 
     static args = []
 
     async run() {
+        // TODO: Check if user is already authenticated
+
+        const { flags } = this.parse(Login)
+
         const email = await cli.prompt('What is your email')
         const password = await cli.prompt('What is your password?', {
             type: 'hide',
         })
 
+        if (flags.signup) {
+            //TODO: handle signup
+        }
+
         cli.action.start('Signing you in to your account')
 
-        const { data, error } = await loginWithFirebase(email, password)
+        const { data, error } = await login(email, password)
 
         if (error) {
             cli.action.stop('Error')
@@ -42,21 +43,5 @@ export default class Login extends Command {
         writeToStorage({ idToken, refreshToken })
 
         cli.action.stop('Success!')
-
-        const { data: storageData } = readFromStorage()
-
-        let responses: any = await inquirer.prompt([
-            {
-                name: 'teams',
-                message:
-                    'Please select your current team. You can switch teams at any point by running "workingon teams".',
-                type: 'list',
-                choices: TEAMS,
-            },
-        ])
-        const team = responses.teams
-        console.log(team)
-
-        writeToStorage({ idToken, refreshToken, currentTeamId: team.id })
     }
 }
