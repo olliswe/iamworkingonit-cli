@@ -28,8 +28,33 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`workingon [STATUS]`](#workingon-status)
 * [`workingon help [COMMAND]`](#workingon-help-command)
+* [`workingon list`](#workingon-list)
 * [`workingon login`](#workingon-login)
+* [`workingon logout`](#workingon-logout)
+* [`workingon show`](#workingon-show)
+
+## `workingon [STATUS]`
+
+Update or clear your status
+
+```
+USAGE
+  $ workingon [STATUS]
+
+ARGUMENTS
+  STATUS  Describe your current status
+
+OPTIONS
+  --clear  Clear you status
+
+EXAMPLES
+  $ workingon "Refactoring Dashboard"
+  $ workingon --clear
+```
+
+_See code: [src/commands/index.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.0/src/commands/index.ts)_
 
 ## `workingon help [COMMAND]`
 
@@ -48,6 +73,28 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1/src/commands/help.ts)_
 
+## `workingon list`
+
+List the statuses of your team
+
+```
+USAGE
+  $ workingon list
+
+EXAMPLE
+  $ workingon list
+
+  +------------------+-------------------------+-------------+
+  |      Member      |         Status          | Last update |
+  +------------------+-------------------------+-------------+
+  | Harry Potter     | "Refactoring Dashboard" | 30min ago   |
+  | Hermione Granger | "Writing tests"         | 1hr ago     |
+  | Ron Weasely      | none                    | 3hrs ago    |
+  +------------------+-------------------------+-------------+
+```
+
+_See code: [src/commands/list.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.0/src/commands/list.ts)_
+
 ## `workingon login`
 
 Login to your account
@@ -55,7 +102,43 @@ Login to your account
 ```
 USAGE
   $ workingon login
+
+OPTIONS
+  --signup  Sign up as new user
+
+EXAMPLES
+  $ workingon login
+  $ workingon login --signup
 ```
 
 _See code: [src/commands/login.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.0/src/commands/login.ts)_
+
+## `workingon logout`
+
+Logout of your account
+
+```
+USAGE
+  $ workingon logout
+
+EXAMPLE
+  $ workingon logout
+```
+
+_See code: [src/commands/logout.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.0/src/commands/logout.ts)_
+
+## `workingon show`
+
+Show your status
+
+```
+USAGE
+  $ workingon show
+
+EXAMPLE
+  $ workingon show
+  "Refactoring tests"   15hrs ago
+```
+
+_See code: [src/commands/show.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.0/src/commands/show.ts)_
 <!-- commandsstop -->

@@ -1,62 +1,51 @@
-import { Command } from '@oclif/command'
+import { Command, flags } from '@oclif/command'
 import cli from 'cli-ux'
-import { loginWithFirebase, readFromStorage, writeToStorage } from '../utils'
-import * as inquirer from 'inquirer'
-
-const TEAMS = [
-    {
-        name: 'LivingPackets',
-        value: '0934rjwer',
-    },
-    { name: 'I Am Working On It', value: 'weoifjwoi' },
-]
+import { getToken, login, setToken } from '../utils'
 
 export default class Login extends Command {
     static description = 'Login to your account'
 
-    static examples = []
+    static examples = ['$ workingon login', '$ workingon login --signup']
 
-    static flags = {}
+    static flags = {
+        signup: flags.boolean({ description: 'Sign up as new user' }),
+    }
 
     static args = []
 
     async run() {
+        const currentToken = await getToken()
+        if (currentToken.accessToken) {
+            this.error(`You're already logged in!
+If you wish to login with a new account, please logout first with:
+$ workingon logout
+           `)
+            return
+        }
+
+        const { flags } = this.parse(Login)
+
         const email = await cli.prompt('What is your email')
         const password = await cli.prompt('What is your password?', {
             type: 'hide',
         })
 
+        if (flags.signup) {
+            //TODO: handle signup
+        }
+
         cli.action.start('Signing you in to your account')
 
-        const { data, error } = await loginWithFirebase(email, password)
+        const { data, error } = await login(email, password)
 
-        if (error) {
+        if (error || !data) {
             cli.action.stop('Error')
-            console.log(error.toString())
+            console.log(error.toString() || 'Unable to login!')
             return
         }
 
-        const refreshToken = data.data.refreshToken
-        const idToken = data.data.idToken
-
-        writeToStorage({ idToken, refreshToken })
+        await setToken(data.accessToken)
 
         cli.action.stop('Success!')
-
-        const { data: storageData } = readFromStorage()
-
-        let responses: any = await inquirer.prompt([
-            {
-                name: 'teams',
-                message:
-                    'Please select your current team. You can switch teams at any point by running "workingon teams".',
-                type: 'list',
-                choices: TEAMS,
-            },
-        ])
-        const team = responses.teams
-        console.log(team)
-
-        writeToStorage({ idToken, refreshToken, currentTeamId: team.id })
     }
 }

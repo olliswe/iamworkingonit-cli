@@ -1,8 +1,15 @@
 import * as path from 'path'
 import * as os from 'os'
 
-export const FIREBASE_API_KEY = 'AIzaSyBi4-TRGR1HzgjG5kEj0SQRB30mpz0Z8iw'
-
 export const STORAGE_FILE = path.join(os.homedir(), '.workingon')
 
-export const ENCRYPTION_KEY = 'lrK3gOrEQAYa7Bhd81'
+export const API_URL = 'http://localhost:3000'
+export const GRAPHQL_URL = API_URL + '/graphql'
+
+export enum STD_ERRORS {
+    AUTH_ERROR = 'authError',
+    HELP_ERROR = 'helpError',
+}
+
+export const ACCESS_TOKEN_PATH = 'workingonAccessToken'
+export const DEFAULT_USER = 'default'
