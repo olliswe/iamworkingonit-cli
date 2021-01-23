@@ -14,7 +14,7 @@
     "@types/inquirer": "^7.3.1",
     "axios": "^0.21.1",
     "inquirer": "^7.3.3",
-    "simple-crypto-js": "^3.0.0",
+    "keytar": "^7.3.0",
     "tslib": "^1.14.1"
   },
   "devDependencies": {

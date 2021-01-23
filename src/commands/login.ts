@@ -1,6 +1,7 @@
 import { Command, flags } from '@oclif/command'
 import cli from 'cli-ux'
-import { login, writeToStorage } from '../utils'
+import { getTokens, login, setTokens, writeToStorage } from '../utils'
+import * as keytar from 'keytar'
 
 export default class Login extends Command {
     static description = 'Login to your account'
@@ -14,7 +15,14 @@ export default class Login extends Command {
     static args = []
 
     async run() {
-        // TODO: Check if user is already authenticated
+        const currentTokens = await getTokens()
+        if (currentTokens.refreshToken && currentTokens.idToken) {
+            this.error(`You're already logged in!
+If you wish to login with a new account, please logout first with:
+$ workingon logout
+           `)
+            return
+        }
 
         const { flags } = this.parse(Login)
 
@@ -40,7 +48,7 @@ export default class Login extends Command {
         const refreshToken = data.data.refreshToken
         const idToken = data.data.idToken
 
-        writeToStorage({ idToken, refreshToken })
+        await setTokens({ refreshToken, idToken })
 
         cli.action.stop('Success!')
     }

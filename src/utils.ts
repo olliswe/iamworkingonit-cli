@@ -1,21 +1,28 @@
 import axios from 'axios'
-import { API_URL, ENCRYPTION_KEY, STORAGE_FILE } from './config'
+import {
+    DEFAULT_USER,
+    ID_TOKEN_PATH,
+    REFRESH_TOKEN_PATH,
+    STD_ERRORS,
+    STORAGE_FILE,
+} from './config'
 import * as fs from 'fs'
 import * as path from 'path'
-import SimpleCrypto from 'simple-crypto-js'
-
-const simpleCrypto = new SimpleCrypto(ENCRYPTION_KEY)
+import * as keytar from 'keytar'
 
 export const login = async (
     email: string,
     password: string
 ): Promise<{ data?: any; error?: any }> => {
     try {
-        const data = await axios.post(`${API_URL}/api/v1/login`, {
-            email,
-            password,
-            returnSecureToken: true,
-        })
+        const data = await axios.post(
+            `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBi4-TRGR1HzgjG5kEj0SQRB30mpz0Z8iw`,
+            {
+                email,
+                password,
+                returnSecureToken: true,
+            }
+        )
         return { data, error: '' }
     } catch (e) {
         return { error: e }
@@ -26,20 +33,66 @@ export const writeToStorage = (content: { [key: string]: string }) => {
     if (!fs.existsSync(path.dirname(STORAGE_FILE))) {
         fs.mkdirSync(path.dirname(STORAGE_FILE))
     }
-
-    const encrypted = simpleCrypto.encrypt(content)
-
-    fs.writeFileSync(STORAGE_FILE, encrypted, { encoding: 'utf-8' })
+    fs.writeFileSync(STORAGE_FILE, JSON.stringify(content), {
+        encoding: 'utf-8',
+    })
 }
 
 export const readFromStorage = () => {
     try {
-        const encryptedData = fs.readFileSync(STORAGE_FILE, {
+        const json = fs.readFileSync(STORAGE_FILE, {
             encoding: 'utf-8',
         })
-        const decryptedData = simpleCrypto.decrypt(encryptedData)
-        return { data: decryptedData }
+        const data = JSON.parse(json)
+        return { data }
     } catch (e) {
         return { error: e }
     }
+}
+
+export const setTokens = async ({
+    refreshToken,
+    idToken,
+}: {
+    refreshToken: string
+    idToken: string
+}) => {
+    await keytar.setPassword(REFRESH_TOKEN_PATH, DEFAULT_USER, refreshToken)
+    await keytar.setPassword(ID_TOKEN_PATH, DEFAULT_USER, idToken)
+}
+
+export const getTokens = async () => {
+    const idToken = await keytar.getPassword(ID_TOKEN_PATH, DEFAULT_USER)
+    const refreshToken = await keytar.getPassword(
+        REFRESH_TOKEN_PATH,
+        DEFAULT_USER
+    )
+    if (!idToken || !refreshToken) {
+        return { error: STD_ERRORS.AUTH_ERROR }
+    }
+    return { idToken, refreshToken }
+}
+
+export const handleError = (error: any) => {
+    switch (error) {
+        case STD_ERRORS.AUTH_ERROR:
+            return `Unable to authenticate you!
+Please login with:
+$ workingon login
+      `
+        default:
+            return error.toString()
+    }
+}
+
+export const clearTokens = async () => {
+    const idFound = await keytar.deletePassword(ID_TOKEN_PATH, DEFAULT_USER)
+    const refreshFound = await keytar.deletePassword(
+        REFRESH_TOKEN_PATH,
+        DEFAULT_USER
+    )
+    if (idFound && refreshFound) {
+        return { success: true }
+    }
+    return { success: false }
 }
