@@ -28,12 +28,34 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
+* [`workingon [COMMENT]`](#workingon-comment)
 * [`workingon help [COMMAND]`](#workingon-help-command)
 * [`workingon list`](#workingon-list)
 * [`workingon login`](#workingon-login)
 * [`workingon logout`](#workingon-logout)
 * [`workingon show`](#workingon-show)
 * [`workingon status [COMMENT]`](#workingon-status-comment)
+
+## `workingon [COMMENT]`
+
+Update or clear your status
+
+```
+USAGE
+  $ workingon [COMMENT]
+
+ARGUMENTS
+  COMMENT  Describe your current status
+
+OPTIONS
+  --clear  Clear you status
+
+EXAMPLES
+  $ workingon "Refactoring Dashboard"
+  $ workingon --clear
+```
+
+_See code: [src/commands/index.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.0/src/commands/index.ts)_
 
 ## `workingon help [COMMAND]`
 

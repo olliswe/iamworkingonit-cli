@@ -7,6 +7,7 @@ export const API_URL = 'https://localhost:3000'
 
 export enum STD_ERRORS {
     AUTH_ERROR = 'authError',
+    HELP_ERROR = 'helpError',
 }
 
 export const ID_TOKEN_PATH = 'workingonIdToken'

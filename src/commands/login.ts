@@ -1,7 +1,6 @@
 import { Command, flags } from '@oclif/command'
 import cli from 'cli-ux'
-import { getTokens, login, setTokens, writeToStorage } from '../utils'
-import * as keytar from 'keytar'
+import { getTokens, login, setTokens } from '../utils'
 
 export default class Login extends Command {
     static description = 'Login to your account'

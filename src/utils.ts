@@ -78,8 +78,10 @@ export const handleError = (error: any) => {
         case STD_ERRORS.AUTH_ERROR:
             return `Unable to authenticate you!
 Please login with:
-$ workingon login
-      `
+$ workingon login`
+        case STD_ERRORS.HELP_ERROR:
+            return `You can view the list of commands with
+$ workingon --help`
         default:
             return error.toString()
     }
