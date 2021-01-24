@@ -34,7 +34,6 @@ USAGE
 * [`workingon login`](#workingon-login)
 * [`workingon logout`](#workingon-logout)
 * [`workingon show`](#workingon-show)
-* [`workingon status [COMMENT]`](#workingon-status-comment)
 
 ## `workingon [COMMENT]`
 
@@ -142,25 +141,4 @@ EXAMPLE
 ```
 
 _See code: [src/commands/show.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.0/src/commands/show.ts)_
-
-## `workingon status [COMMENT]`
-
-Update or clear your status
-
-```
-USAGE
-  $ workingon status [COMMENT]
-
-ARGUMENTS
-  COMMENT  Describe your current status
-
-OPTIONS
-  --clear  Clear you status
-
-EXAMPLES
-  $ workingon status "Refactoring Dashboard"
-  $ workingon status --clear
-```
-
-_See code: [src/commands/status.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.0/src/commands/status.ts)_
 <!-- commandsstop -->
