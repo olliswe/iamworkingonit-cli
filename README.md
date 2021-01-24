@@ -28,23 +28,23 @@ USAGE
 <!-- usagestop -->
 # Commands
 <!-- commands -->
-* [`workingon [COMMENT]`](#workingon-comment)
+* [`workingon [STATUS]`](#workingon-status)
 * [`workingon help [COMMAND]`](#workingon-help-command)
 * [`workingon list`](#workingon-list)
 * [`workingon login`](#workingon-login)
 * [`workingon logout`](#workingon-logout)
 * [`workingon show`](#workingon-show)
 
-## `workingon [COMMENT]`
+## `workingon [STATUS]`
 
 Update or clear your status
 
 ```
 USAGE
-  $ workingon [COMMENT]
+  $ workingon [STATUS]
 
 ARGUMENTS
-  COMMENT  Describe your current status
+  STATUS  Describe your current status
 
 OPTIONS
   --clear  Clear you status

@@ -16,7 +16,7 @@ export default class Status extends Command {
 
     static args = [
         {
-            name: 'comment',
+            name: 'status',
             required: false,
             description: 'Describe your current status',
         },
@@ -34,7 +34,7 @@ export default class Status extends Command {
             return
         }
 
-        const status = args?.comment
+        const status = args?.status
         if (!status) {
             this.error(`You need to specify a status update!
 e.g. $ workingon "Refactoring tests"`)
