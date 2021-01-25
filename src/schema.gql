@@ -1,0 +1,142 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Updatetype {
+  """Id of Update Type"""
+  id: String!
+
+  """Content of Update Type"""
+  type: String!
+  statusupdates: [Statusupdate!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Statusupdate {
+  """Id of Status Update"""
+  id: String!
+
+  """Content of Status Update"""
+  status: String!
+  updatetype: Updatetype!
+  user: User
+  team: Team
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Team {
+  """Id of team"""
+  id: String!
+  avatar: String
+
+  """Name of team"""
+  teamName: String!
+  statusupdates: [Statusupdate!]
+  users: [User!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type User {
+  """id"""
+  id: String!
+  avatar: String
+
+  """First name of user"""
+  firstName: String!
+
+  """Last name of user"""
+  lastName: String!
+
+  """Email of user"""
+  email: String!
+
+  """Password of a user"""
+  password: String!
+  team: Team
+  statusupdates: Statusupdate
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type LoginOutput {
+  accessToken: String!
+}
+
+type Query {
+  user(id: String!): User!
+  teams: [Team!]!
+  team(id: String!): Team!
+  statusupdates(limit: Int, userId: String): [Statusupdate!]!
+}
+
+type Mutation {
+  signup(createUserInput: CreateUserInput!): User!
+  login(loginInput: LoginInput!): LoginOutput!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+  createTeam(createTeamInput: CreateTeamInput!): Team!
+  updateTeam(updateTeamInput: UpdateTeamInput!): Team!
+  removeTeam(id: String!): Team!
+  createStatusupdate(createStatusupdateInput: CreateStatusupdateInput!): Statusupdate!
+}
+
+input CreateUserInput {
+  """User First Name"""
+  firstName: String!
+
+  """User Last Name"""
+  lastName: String!
+
+  """User Email"""
+  email: String!
+
+  """User Password"""
+  password: String!
+}
+
+input LoginInput {
+  """User Email"""
+  email: String!
+
+  """User Password"""
+  password: String!
+}
+
+input UpdateUserInput {
+  """User First Name"""
+  firstName: String
+
+  """User Last Name"""
+  lastName: String
+
+  """User Email"""
+  email: String
+
+  """User Password"""
+  password: String
+  userId: String!
+  teamId: String
+}
+
+input CreateTeamInput {
+  """Team Name"""
+  teamName: String!
+}
+
+input UpdateTeamInput {
+  teamName: String!
+  id: String!
+}
+
+input CreateStatusupdateInput {
+  """Content of Status Update"""
+  status: String!
+}

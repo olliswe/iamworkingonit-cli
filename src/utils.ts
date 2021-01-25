@@ -1,29 +1,26 @@
-import axios from 'axios'
 import {
+    ACCESS_TOKEN_PATH,
     DEFAULT_USER,
-    ID_TOKEN_PATH,
-    REFRESH_TOKEN_PATH,
+    GRAPHQL_URL,
     STD_ERRORS,
     STORAGE_FILE,
 } from './config'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as keytar from 'keytar'
+import { getSdk } from './generated/graphql'
+import { GraphQLClient } from 'graphql-request'
 
-export const login = async (
-    email: string,
-    password: string
-): Promise<{ data?: any; error?: any }> => {
+const GqlSdk = () => {
+    const client = new GraphQLClient(GRAPHQL_URL)
+    const sdk = getSdk(client)
+    return sdk
+}
+
+export const login = async (email: string, password: string) => {
     try {
-        const data = await axios.post(
-            `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBi4-TRGR1HzgjG5kEj0SQRB30mpz0Z8iw`,
-            {
-                email,
-                password,
-                returnSecureToken: true,
-            }
-        )
-        return { data, error: '' }
+        const { login } = await GqlSdk().Login({ email, password })
+        return { data: login }
     } catch (e) {
         return { error: e }
     }
@@ -50,27 +47,19 @@ export const readFromStorage = () => {
     }
 }
 
-export const setTokens = async ({
-    refreshToken,
-    idToken,
-}: {
-    refreshToken: string
-    idToken: string
-}) => {
-    await keytar.setPassword(REFRESH_TOKEN_PATH, DEFAULT_USER, refreshToken)
-    await keytar.setPassword(ID_TOKEN_PATH, DEFAULT_USER, idToken)
+export const setToken = async (accessToken: string) => {
+    await keytar.setPassword(ACCESS_TOKEN_PATH, DEFAULT_USER, accessToken)
 }
 
-export const getTokens = async () => {
-    const idToken = await keytar.getPassword(ID_TOKEN_PATH, DEFAULT_USER)
-    const refreshToken = await keytar.getPassword(
-        REFRESH_TOKEN_PATH,
+export const getToken = async () => {
+    const accessToken = await keytar.getPassword(
+        ACCESS_TOKEN_PATH,
         DEFAULT_USER
     )
-    if (!idToken || !refreshToken) {
+    if (!accessToken) {
         return { error: STD_ERRORS.AUTH_ERROR }
     }
-    return { idToken, refreshToken }
+    return { accessToken }
 }
 
 export const handleError = (error: any) => {
@@ -88,12 +77,11 @@ $ workingon --help`
 }
 
 export const clearTokens = async () => {
-    const idFound = await keytar.deletePassword(ID_TOKEN_PATH, DEFAULT_USER)
-    const refreshFound = await keytar.deletePassword(
-        REFRESH_TOKEN_PATH,
+    const accessFound = await keytar.deletePassword(
+        ACCESS_TOKEN_PATH,
         DEFAULT_USER
     )
-    if (idFound && refreshFound) {
+    if (accessFound) {
         return { success: true }
     }
     return { success: false }

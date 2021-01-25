@@ -1,0 +1,22 @@
+mutation CreateStatusupdate($status: String!){
+  createStatusupdate(
+    createStatusupdateInput: {
+      status: $status
+    }
+)
+  {
+    id
+    status
+    createdAt
+    updatedAt
+    user {
+      id
+      firstName
+      lastName
+    }
+    team {
+      id
+      teamName
+    }
+  }
+}

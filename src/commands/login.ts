@@ -1,6 +1,6 @@
 import { Command, flags } from '@oclif/command'
 import cli from 'cli-ux'
-import { getTokens, login, setTokens } from '../utils'
+import { getToken, login, setToken } from '../utils'
 
 export default class Login extends Command {
     static description = 'Login to your account'
@@ -14,8 +14,8 @@ export default class Login extends Command {
     static args = []
 
     async run() {
-        const currentTokens = await getTokens()
-        if (currentTokens.refreshToken && currentTokens.idToken) {
+        const currentToken = await getToken()
+        if (currentToken.accessToken) {
             this.error(`You're already logged in!
 If you wish to login with a new account, please logout first with:
 $ workingon logout
@@ -38,16 +38,13 @@ $ workingon logout
 
         const { data, error } = await login(email, password)
 
-        if (error) {
+        if (error || !data) {
             cli.action.stop('Error')
-            console.log(error.toString())
+            console.log(error.toString() || 'Unable to login!')
             return
         }
 
-        const refreshToken = data.data.refreshToken
-        const idToken = data.data.idToken
-
-        await setTokens({ refreshToken, idToken })
+        await setToken(data.accessToken)
 
         cli.action.stop('Success!')
     }

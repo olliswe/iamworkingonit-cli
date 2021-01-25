@@ -1,6 +1,5 @@
 import { Command } from '@oclif/command'
-import * as keytar from 'keytar'
-import { getTokens, handleError } from '../utils'
+import { getToken, handleError } from '../utils'
 
 export default class Show extends Command {
     static description = 'Show your status'
@@ -16,10 +15,10 @@ export default class Show extends Command {
     static args = []
 
     async run() {
-        const { error, idToken, refreshToken } = await getTokens()
+        const { error, accessToken } = await getToken()
         if (error) {
             this.error(handleError(error))
         }
-        console.log(idToken, refreshToken)
+        console.log(accessToken)
     }
 }
