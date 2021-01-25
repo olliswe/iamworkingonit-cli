@@ -30,6 +30,7 @@ USAGE
 <!-- commands -->
 * [`workingon [STATUS]`](#workingon-status)
 * [`workingon help [COMMAND]`](#workingon-help-command)
+* [`workingon join`](#workingon-join)
 * [`workingon list`](#workingon-list)
 * [`workingon login`](#workingon-login)
 * [`workingon logout`](#workingon-logout)
@@ -72,6 +73,26 @@ OPTIONS
 ```
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1/src/commands/help.ts)_
+
+## `workingon join`
+
+Join a team if you know the ID
+
+```
+USAGE
+  $ workingon join
+
+EXAMPLE
+  $ workingon join
+
+  Congratulations! You've joined team "Gryffindor"
+
+  Here's what you can do next:
+  - $ workingon list
+  - $ workingon status
+```
+
+_See code: [src/commands/join.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.0/src/commands/join.ts)_
 
 ## `workingon list`
 
