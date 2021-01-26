@@ -1,6 +1,6 @@
 import { Command } from '@oclif/command'
 import cli from 'cli-ux'
-import { clearTokens } from '../utils'
+import { clearTokens } from '../helpers/utils'
 
 export default class Logout extends Command {
     static description = 'Logout of your account'

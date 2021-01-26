@@ -1,30 +1,12 @@
 import {
     ACCESS_TOKEN_PATH,
     DEFAULT_USER,
-    GRAPHQL_URL,
     STD_ERRORS,
     STORAGE_FILE,
-} from './config'
+} from '../config'
 import * as fs from 'fs'
 import * as path from 'path'
 import * as keytar from 'keytar'
-import { getSdk } from './generated/graphql'
-import { GraphQLClient } from 'graphql-request'
-
-const GqlSdk = () => {
-    const client = new GraphQLClient(GRAPHQL_URL)
-    const sdk = getSdk(client)
-    return sdk
-}
-
-export const login = async (email: string, password: string) => {
-    try {
-        const { login } = await GqlSdk().Login({ email, password })
-        return { data: login }
-    } catch (e) {
-        return { error: e }
-    }
-}
 
 export const writeToStorage = (content: { [key: string]: string }) => {
     if (!fs.existsSync(path.dirname(STORAGE_FILE))) {
@@ -60,20 +42,6 @@ export const getToken = async () => {
         return { error: STD_ERRORS.AUTH_ERROR }
     }
     return { accessToken }
-}
-
-export const handleError = (error: any) => {
-    switch (error) {
-        case STD_ERRORS.AUTH_ERROR:
-            return `Unable to authenticate you!
-Please login with:
-$ workingon login`
-        case STD_ERRORS.HELP_ERROR:
-            return `You can view the list of commands with
-$ workingon --help`
-        default:
-            return error.toString()
-    }
 }
 
 export const clearTokens = async () => {

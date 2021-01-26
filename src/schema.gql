@@ -31,6 +31,14 @@ type Statusupdate {
   updatedAt: DateTime!
 }
 
+type Teamsecret {
+  """id"""
+  id: String!
+  secret: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
 type Team {
   """Id of team"""
   id: String!
@@ -40,6 +48,7 @@ type Team {
   teamName: String!
   statusupdates: [Statusupdate!]
   users: [User!]!
+  secret: Teamsecret!
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -81,8 +90,9 @@ type Mutation {
   signup(createUserInput: CreateUserInput!): User!
   login(loginInput: LoginInput!): LoginOutput!
   createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
+  joinTeam(joinTeamInput: JoinTeamInput!): User!
   createTeam(createTeamInput: CreateTeamInput!): Team!
+  generateSecret: Teamsecret!
   updateTeam(updateTeamInput: UpdateTeamInput!): Team!
   removeTeam(id: String!): Team!
   createStatusupdate(createStatusupdateInput: CreateStatusupdateInput!): Statusupdate!
@@ -110,20 +120,9 @@ input LoginInput {
   password: String!
 }
 
-input UpdateUserInput {
-  """User First Name"""
-  firstName: String
-
-  """User Last Name"""
-  lastName: String
-
-  """User Email"""
-  email: String
-
-  """User Password"""
-  password: String
-  userId: String!
-  teamId: String
+input JoinTeamInput {
+  """Current Secret of Team"""
+  secret: String!
 }
 
 input CreateTeamInput {

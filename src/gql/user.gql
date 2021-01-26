@@ -3,8 +3,13 @@ query User($userId: String!) {
     id
     firstName
     lastName
+    email
     avatar
     createdAt
     updatedAt
+    team {
+      id
+      teamName
+    }
   }
 }

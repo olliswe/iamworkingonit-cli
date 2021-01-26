@@ -41,6 +41,15 @@ export type Statusupdate = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type Teamsecret = {
+  __typename?: 'Teamsecret';
+  /** id */
+  id: Scalars['String'];
+  secret: Scalars['String'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
+
 export type Team = {
   __typename?: 'Team';
   /** Id of team */
@@ -50,6 +59,7 @@ export type Team = {
   teamName: Scalars['String'];
   statusupdates?: Maybe<Array<Statusupdate>>;
   users: Array<User>;
+  secret: Teamsecret;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
@@ -107,8 +117,9 @@ export type Mutation = {
   signup: User;
   login: LoginOutput;
   createUser: User;
-  updateUser: User;
+  joinTeam: User;
   createTeam: Team;
+  generateSecret: Teamsecret;
   updateTeam: Team;
   removeTeam: Team;
   createStatusupdate: Statusupdate;
@@ -130,8 +141,8 @@ export type MutationCreateUserArgs = {
 };
 
 
-export type MutationUpdateUserArgs = {
-  updateUserInput: UpdateUserInput;
+export type MutationJoinTeamArgs = {
+  joinTeamInput: JoinTeamInput;
 };
 
 
@@ -172,17 +183,9 @@ export type LoginInput = {
   password: Scalars['String'];
 };
 
-export type UpdateUserInput = {
-  /** User First Name */
-  firstName?: Maybe<Scalars['String']>;
-  /** User Last Name */
-  lastName?: Maybe<Scalars['String']>;
-  /** User Email */
-  email?: Maybe<Scalars['String']>;
-  /** User Password */
-  password?: Maybe<Scalars['String']>;
-  userId: Scalars['String'];
-  teamId?: Maybe<Scalars['String']>;
+export type JoinTeamInput = {
+  /** Current Secret of Team */
+  secret: Scalars['String'];
 };
 
 export type CreateTeamInput = {
@@ -230,6 +233,34 @@ export type CreateTeamMutation = (
   & { createTeam: (
     { __typename?: 'Team' }
     & Pick<Team, 'id' | 'teamName'>
+  ) }
+);
+
+export type GenerateSecretMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GenerateSecretMutation = (
+  { __typename?: 'Mutation' }
+  & { generateSecret: (
+    { __typename?: 'Teamsecret' }
+    & Pick<Teamsecret, 'secret'>
+  ) }
+);
+
+export type JoinTeamMutationVariables = Exact<{
+  secret: Scalars['String'];
+}>;
+
+
+export type JoinTeamMutation = (
+  { __typename?: 'Mutation' }
+  & { joinTeam: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'firstName' | 'lastName' | 'email'>
+    & { team?: Maybe<(
+      { __typename?: 'Team' }
+      & Pick<Team, 'id' | 'teamName'>
+    )> }
   ) }
 );
 
@@ -284,24 +315,6 @@ export type StatusupdatesQuery = (
   )> }
 );
 
-export type UpdateUserMutationVariables = Exact<{
-  userId: Scalars['String'];
-  teamId?: Maybe<Scalars['String']>;
-}>;
-
-
-export type UpdateUserMutation = (
-  { __typename?: 'Mutation' }
-  & { updateUser: (
-    { __typename?: 'User' }
-    & Pick<User, 'id' | 'firstName' | 'lastName'>
-    & { team?: Maybe<(
-      { __typename?: 'Team' }
-      & Pick<Team, 'id' | 'teamName'>
-    )> }
-  ) }
-);
-
 export type UserQueryVariables = Exact<{
   userId: Scalars['String'];
 }>;
@@ -311,7 +324,11 @@ export type UserQuery = (
   { __typename?: 'Query' }
   & { user: (
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'firstName' | 'lastName' | 'avatar' | 'createdAt' | 'updatedAt'>
+    & Pick<User, 'id' | 'firstName' | 'lastName' | 'email' | 'avatar' | 'createdAt' | 'updatedAt'>
+    & { team?: Maybe<(
+      { __typename?: 'Team' }
+      & Pick<Team, 'id' | 'teamName'>
+    )> }
   ) }
 );
 
@@ -340,6 +357,27 @@ export const CreateTeamDocument = gql`
   createTeam(createTeamInput: {teamName: $teamName}) {
     id
     teamName
+  }
+}
+    `;
+export const GenerateSecretDocument = gql`
+    mutation GenerateSecret {
+  generateSecret {
+    secret
+  }
+}
+    `;
+export const JoinTeamDocument = gql`
+    mutation JoinTeam($secret: String!) {
+  joinTeam(joinTeamInput: {secret: $secret}) {
+    id
+    firstName
+    lastName
+    email
+    team {
+      id
+      teamName
+    }
   }
 }
     `;
@@ -377,28 +415,20 @@ export const StatusupdatesDocument = gql`
   }
 }
     `;
-export const UpdateUserDocument = gql`
-    mutation updateUser($userId: String!, $teamId: String) {
-  updateUser(updateUserInput: {userId: $userId, teamId: $teamId}) {
-    id
-    firstName
-    lastName
-    team {
-      id
-      teamName
-    }
-  }
-}
-    `;
 export const UserDocument = gql`
     query User($userId: String!) {
   user(id: $userId) {
     id
     firstName
     lastName
+    email
     avatar
     createdAt
     updatedAt
+    team {
+      id
+      teamName
+    }
   }
 }
     `;
@@ -415,6 +445,12 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     createTeam(variables: CreateTeamMutationVariables, requestHeaders?: Headers): Promise<CreateTeamMutation> {
       return withWrapper(() => client.request<CreateTeamMutation>(print(CreateTeamDocument), variables, requestHeaders));
     },
+    GenerateSecret(variables?: GenerateSecretMutationVariables, requestHeaders?: Headers): Promise<GenerateSecretMutation> {
+      return withWrapper(() => client.request<GenerateSecretMutation>(print(GenerateSecretDocument), variables, requestHeaders));
+    },
+    JoinTeam(variables: JoinTeamMutationVariables, requestHeaders?: Headers): Promise<JoinTeamMutation> {
+      return withWrapper(() => client.request<JoinTeamMutation>(print(JoinTeamDocument), variables, requestHeaders));
+    },
     Login(variables: LoginMutationVariables, requestHeaders?: Headers): Promise<LoginMutation> {
       return withWrapper(() => client.request<LoginMutation>(print(LoginDocument), variables, requestHeaders));
     },
@@ -423,9 +459,6 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     Statusupdates(variables?: StatusupdatesQueryVariables, requestHeaders?: Headers): Promise<StatusupdatesQuery> {
       return withWrapper(() => client.request<StatusupdatesQuery>(print(StatusupdatesDocument), variables, requestHeaders));
-    },
-    updateUser(variables: UpdateUserMutationVariables, requestHeaders?: Headers): Promise<UpdateUserMutation> {
-      return withWrapper(() => client.request<UpdateUserMutation>(print(UpdateUserDocument), variables, requestHeaders));
     },
     User(variables: UserQueryVariables, requestHeaders?: Headers): Promise<UserQuery> {
       return withWrapper(() => client.request<UserQuery>(print(UserDocument), variables, requestHeaders));

@@ -1,6 +1,7 @@
 import { Command, flags } from '@oclif/command'
 import cli from 'cli-ux'
-import { getToken, login, setToken } from '../utils'
+import { getToken, setToken } from '../helpers/utils'
+import { login, signup } from '../helpers/queries'
 
 export default class Login extends Command {
     static description = 'Login to your account'
@@ -25,23 +26,51 @@ $ workingon logout
 
         const { flags } = this.parse(Login)
 
+        if (flags.signup) console.log('Welcome to iamworkingon.it!')
+
         const email = await cli.prompt('What is your email')
         const password = await cli.prompt('What is your password?', {
             type: 'hide',
         })
 
         if (flags.signup) {
-            //TODO: handle signup
-        }
+            const password2 = await cli.prompt('Please repeat the password', {
+                type: 'hide',
+            })
+            if (password !== password2) {
+                this.error("Passwords don't match, please try again!")
+            }
+            console.log('Noice they match!')
+            const firstName = await cli.prompt(
+                'Almost there... What is your first name?'
+            )
+            console.log(`Thanks ${firstName}!`)
+            const lastName = await cli.prompt(
+                `Last but not least, what is your last name ?`
+            )
 
-        cli.action.start('Signing you in to your account')
+            cli.action.start('Creating your account..')
+
+            const { data, error } = await signup({
+                email,
+                password,
+                firstName,
+                lastName,
+            })
+
+            if (error || !data) {
+                cli.action.stop('Error')
+                this.error(error.toString() || 'Unable to login!')
+            }
+        } else {
+            cli.action.start('Signing you in to your account...')
+        }
 
         const { data, error } = await login(email, password)
 
         if (error || !data) {
             cli.action.stop('Error')
-            console.log(error.toString() || 'Unable to login!')
-            return
+            this.error(error.toString() || 'Unable to login!')
         }
 
         await setToken(data.accessToken)
