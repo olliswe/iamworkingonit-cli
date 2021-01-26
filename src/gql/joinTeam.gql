@@ -1,0 +1,12 @@
+mutation JoinTeam($secret: String!) {
+  joinTeam(joinTeamInput: {secret: $secret}) {
+    id
+    firstName
+    lastName
+    email
+    team {
+      id
+      teamName
+    }
+  }
+}

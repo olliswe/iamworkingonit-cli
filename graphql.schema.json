@@ -244,6 +244,81 @@
       },
       {
         "kind": "OBJECT",
+        "name": "Teamsecret",
+        "description": null,
+        "fields": [
+          {
+            "name": "id",
+            "description": "id",
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "secret",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "createdAt",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "updatedAt",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "SCALAR",
+                "name": "DateTime",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          }
+        ],
+        "inputFields": null,
+        "interfaces": [],
+        "enumValues": null,
+        "possibleTypes": null
+      },
+      {
+        "kind": "OBJECT",
         "name": "Team",
         "description": null,
         "fields": [
@@ -330,6 +405,22 @@
                     "ofType": null
                   }
                 }
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "secret",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Teamsecret",
+                "ofType": null
               }
             },
             "isDeprecated": false,
@@ -810,18 +901,18 @@
             "deprecationReason": null
           },
           {
-            "name": "updateUser",
+            "name": "joinTeam",
             "description": null,
             "args": [
               {
-                "name": "updateUserInput",
+                "name": "joinTeamInput",
                 "description": null,
                 "type": {
                   "kind": "NON_NULL",
                   "name": null,
                   "ofType": {
                     "kind": "INPUT_OBJECT",
-                    "name": "UpdateUserInput",
+                    "name": "JoinTeamInput",
                     "ofType": null
                   }
                 },
@@ -865,6 +956,22 @@
               "ofType": {
                 "kind": "OBJECT",
                 "name": "Team",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
+            "name": "generateSecret",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "Teamsecret",
                 "ofType": null
               }
             },
@@ -1078,53 +1185,13 @@
       },
       {
         "kind": "INPUT_OBJECT",
-        "name": "UpdateUserInput",
+        "name": "JoinTeamInput",
         "description": null,
         "fields": null,
         "inputFields": [
           {
-            "name": "firstName",
-            "description": "User First Name",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "lastName",
-            "description": "User Last Name",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "email",
-            "description": "User Email",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "password",
-            "description": "User Password",
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "userId",
-            "description": null,
+            "name": "secret",
+            "description": "Current Secret of Team",
             "type": {
               "kind": "NON_NULL",
               "name": null,
@@ -1133,16 +1200,6 @@
                 "name": "String",
                 "ofType": null
               }
-            },
-            "defaultValue": null
-          },
-          {
-            "name": "teamId",
-            "description": null,
-            "type": {
-              "kind": "SCALAR",
-              "name": "String",
-              "ofType": null
             },
             "defaultValue": null
           }

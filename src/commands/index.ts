@@ -1,8 +1,8 @@
 import { Command, flags } from '@oclif/command'
 import cli from 'cli-ux'
 import * as inquirer from 'inquirer'
-import { handleError } from '../utils'
 import { STD_ERRORS } from '../config'
+import { addStatusUpdate } from '../helpers/queries'
 
 export default class Status extends Command {
     static description = 'Update or clear your status'
@@ -55,7 +55,7 @@ e.g. $ workingon "Refactoring tests"`)
             ])
             const isUpdate = responses.isUpdate
             if (!isUpdate) {
-                this.error(handleError(STD_ERRORS.HELP_ERROR))
+                this.error(STD_ERRORS.HELP_ERROR)
                 return
             }
         }
@@ -63,9 +63,13 @@ e.g. $ workingon "Refactoring tests"`)
         cli.action.start(`Setting your status to
 "${status}"
       `)
-        //TODO: Update status
+        const { data, error } = await addStatusUpdate(status)
 
-        cli.action.stop('Done')
+        if (error || !data) {
+            this.error(error || STD_ERRORS.OOPS_ERROR)
+        }
+
+        cli.action.stop(`Done! Your status was successfully updated!`)
         return
     }
 }

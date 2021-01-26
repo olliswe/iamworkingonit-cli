@@ -1,7 +1,7 @@
 # If $userId is set and you are the current user, you'll get all you updates, across teams
 # If $userId is not set you only get the updates of your current team
 
-query Statusupdates($userId: String, $limit: Int) {
+query Statusupdates($userId: String , $limit: Int) {
   statusupdates(userId: $userId, limit: $limit) {
     createdAt
     status
