@@ -11,11 +11,13 @@
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
     "@oclif/plugin-help": "^3.2.1",
-    "@types/inquirer": "^7.3.1",
+    "@types/lodash": "^4.14.168",
+    "date-fns": "^2.16.1",
     "graphql-request": "^3.4.0",
     "inquirer": "^7.3.3",
     "jwt-decode": "^3.1.2",
     "keytar": "^7.3.0",
+    "lodash": "^4.17.20",
     "tslib": "^1.14.1"
   },
   "devDependencies": {
@@ -28,6 +30,7 @@
     "@types/node": "^10.17.51",
     "debug": "^4.3.1",
     "eslint": "^5.16.0",
+    "@types/inquirer": "^7.3.1",
     "eslint-config-oclif": "^3.1.0",
     "eslint-config-oclif-typescript": "^0.1.0",
     "globby": "^10.0.2",

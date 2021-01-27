@@ -3,25 +3,30 @@ import { GraphQLClient } from 'graphql-request'
 import { GRAPHQL_URL, STD_ERRORS } from '../config'
 import { getSdk } from '../generated/graphql'
 import { getToken } from './utils'
+import jwt_decode from 'jwt-decode'
+import { get } from 'lodash'
 
 const GqlSdk = async (withAuth = true) => {
     let options: Dom.RequestInit | undefined
+    let userId: string | undefined
     if (withAuth) {
         const { accessToken } = await getToken()
         if (!accessToken) {
             throw STD_ERRORS.AUTH_ERROR
         }
         options = { headers: { Authorization: `Bearer ${accessToken}` } }
+        const jwt = jwt_decode(accessToken)
+        userId = get(jwt, 'id', '')
     }
     const client = new GraphQLClient(GRAPHQL_URL, options)
     const sdk = getSdk(client)
-    return sdk
+    return { sdk, userId }
 }
 
 export const login = async (email: string, password: string) => {
     try {
-        const gql = await GqlSdk(false)
-        const { login } = await gql.Login({ email, password })
+        const { sdk } = await GqlSdk(false)
+        const { login } = await sdk.Login({ email, password })
         return { data: login }
     } catch (e) {
         return { error: e }
@@ -35,8 +40,8 @@ export const signup = async (input: {
     lastName: string
 }) => {
     try {
-        const gql = await GqlSdk(false)
-        const { signup } = await gql.Signup(input)
+        const { sdk } = await GqlSdk(false)
+        const { signup } = await sdk.Signup(input)
         return { data: signup }
     } catch (e) {
         return { error: e }
@@ -45,9 +50,21 @@ export const signup = async (input: {
 
 export const addStatusUpdate = async (status: string) => {
     try {
-        const gql = await GqlSdk()
-        const { createStatusupdate } = await gql.CreateStatusupdate({ status })
+        const { sdk } = await GqlSdk()
+        const { createStatusupdate } = await sdk.CreateStatusupdate({
+            status,
+        })
         return { data: createStatusupdate }
+    } catch (e) {
+        return { error: e }
+    }
+}
+
+export const getLatestStatusUpdate = async () => {
+    try {
+        const { sdk, userId } = await GqlSdk()
+        const { statusupdates } = await sdk.Statusupdates({ userId, limit: 1 })
+        return { data: statusupdates }
     } catch (e) {
         return { error: e }
     }

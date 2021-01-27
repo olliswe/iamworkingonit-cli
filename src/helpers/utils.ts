@@ -7,6 +7,7 @@ import {
 import * as fs from 'fs'
 import * as path from 'path'
 import * as keytar from 'keytar'
+import { formatDistanceToNow, parseISO } from 'date-fns'
 
 export const writeToStorage = (content: { [key: string]: string }) => {
     if (!fs.existsSync(path.dirname(STORAGE_FILE))) {
@@ -53,4 +54,8 @@ export const clearTokens = async () => {
         return { success: true }
     }
     return { success: false }
+}
+
+export const getTimeSince = (iso: string) => {
+    return formatDistanceToNow(parseISO(iso)) + ' ago'
 }
