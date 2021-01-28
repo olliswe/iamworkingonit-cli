@@ -9,6 +9,7 @@ query Team {
       statusupdates {
         id
         status
+        createdAt
       }
     }
   }

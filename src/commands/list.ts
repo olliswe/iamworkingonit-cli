@@ -1,6 +1,8 @@
 import { Command } from '@oclif/command'
 import { getTeam } from '../helpers/queries'
 import { STD_ERRORS } from '../config'
+import cli from 'cli-ux'
+import { getTimeSince } from '../helpers/utils'
 
 export default class List extends Command {
     static description = 'List the statuses of your team'
@@ -24,12 +26,44 @@ export default class List extends Command {
     static args = []
 
     async run() {
+        cli.action.start('Fetching data...')
         const { data, error } = await getTeam()
+        cli.action.stop('Done!')
+        this.log('')
 
         if (!data || error) {
             this.error(error || STD_ERRORS.OOPS_ERROR)
         }
 
-        console.log(data)
+        const tableData = data.users.map((user) => ({
+            ...user,
+            statusUpdate: user.statusupdates
+                ? user.statusupdates[0]
+                : undefined,
+        }))
+
+        this.log(`Team ${data.teamName}:`)
+
+        cli.table(tableData, {
+            member: {
+                get: (row) => `${row.firstName} ${row.lastName}`,
+                header: 'Member',
+                minWidth: 15,
+            },
+            status: {
+                header: 'Status',
+                get: (row) =>
+                    row.statusUpdate ? `"${row.statusUpdate.status}"` : 'none',
+                minWidth: 40,
+            },
+            latestUpdate: {
+                header: 'Latest update',
+                get: (row) =>
+                    row.statusUpdate
+                        ? getTimeSince(row.statusUpdate.createdAt)
+                        : '',
+                minWidth: 10,
+            },
+        })
     }
 }
