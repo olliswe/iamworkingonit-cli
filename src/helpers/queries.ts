@@ -79,3 +79,13 @@ export const getTeam = async () => {
         return { error: e }
     }
 }
+
+export const joinTeam = async (secret: string) => {
+    try {
+        const { sdk } = await GqlSdk()
+        const { joinTeam } = await sdk.JoinTeam({ secret })
+        return { data: joinTeam }
+    } catch (e) {
+        return { error: e }
+    }
+}
