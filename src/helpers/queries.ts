@@ -72,9 +72,32 @@ export const getLatestStatusUpdate = async () => {
 
 export const getTeam = async () => {
     try {
-        const { sdk } = await GqlSdk()
+        const { sdk, userId } = await GqlSdk()
         const { team } = await sdk.Team()
         return { data: team }
+    } catch (e) {
+        return { error: e }
+    }
+}
+
+export const getUser = async () => {
+    try {
+        const { sdk, userId } = await GqlSdk()
+        if (!userId) {
+            throw STD_ERRORS.AUTH_ERROR
+        }
+        const { user } = await sdk.User({ userId })
+        return { data: user }
+    } catch (error) {
+        return { error }
+    }
+}
+
+export const createTeam = async (teamName: string) => {
+    try {
+        const { sdk } = await GqlSdk()
+        const { createTeam } = await sdk.createTeam({ teamName })
+        return { data: createTeam }
     } catch (e) {
         return { error: e }
     }

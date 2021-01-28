@@ -7,7 +7,7 @@
         "url": "http://localhost:3000/graphql",
         "headers": {
           "user-agent": "JS GraphQL",
-          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9saXZlcml5ZXJAZ21haWwuY29tIiwiaWQiOiI3ZmQ3ZDg3ZS1lZTAyLTQwMDgtYWY4NC0yZmM2YjNlNGJhMmEiLCJpYXQiOjE2MTE3NzgyMjIsImV4cCI6MTYxMTg2NDYyMn0.S6KDJzVjlzAIUYvvIttQ5n8jFrgalz-Siqz3HHKpG2w"
+          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImZvb0BiYXIuY29tIiwiaWQiOiI0MTE4ZGU4MS1kNjE1LTQ1NzQtOGEwNC1jMjBjYjVjNDcxMWUiLCJpYXQiOjE2MTE4NjI0NjUsImV4cCI6MTYxMTk0ODg2NX0.zx08NXeDYdB6qQsCB2QEcgwv5aljWr6WFpdK8XyPQ8I"
         },
         "introspect": true
       }
