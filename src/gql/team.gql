@@ -1,0 +1,15 @@
+query Team {
+  team {
+    teamName
+    users {
+      id
+      email
+      firstName
+      lastName
+      statusupdates {
+        id
+        status
+      }
+    }
+  }
+}

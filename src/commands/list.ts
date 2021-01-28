@@ -1,4 +1,6 @@
 import { Command } from '@oclif/command'
+import { getTeam } from '../helpers/queries'
+import { STD_ERRORS } from '../config'
 
 export default class List extends Command {
     static description = 'List the statuses of your team'
@@ -21,5 +23,13 @@ export default class List extends Command {
 
     static args = []
 
-    async run() {}
+    async run() {
+        const { data, error } = await getTeam()
+
+        if (!data || error) {
+            this.error(error || STD_ERRORS.OOPS_ERROR)
+        }
+
+        console.log(data)
+    }
 }
