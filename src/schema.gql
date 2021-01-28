@@ -81,8 +81,12 @@ type LoginOutput {
 
 type Query {
   user(id: String!): User!
-  team: Team!
+  team(queryTeamInput: QueryTeamInput): Team!
   statusupdates(teamId: String, limit: Int, userId: String): [Statusupdate!]!
+}
+
+input QueryTeamInput {
+  limit: Int!
 }
 
 type Mutation {

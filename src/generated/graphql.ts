@@ -101,10 +101,19 @@ export type QueryUserArgs = {
 };
 
 
+export type QueryTeamArgs = {
+  queryTeamInput?: Maybe<QueryTeamInput>;
+};
+
+
 export type QueryStatusupdatesArgs = {
   teamId?: Maybe<Scalars['String']>;
   limit?: Maybe<Scalars['Int']>;
   userId?: Maybe<Scalars['String']>;
+};
+
+export type QueryTeamInput = {
+  limit: Scalars['Int'];
 };
 
 export type Mutation = {
