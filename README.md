@@ -19,7 +19,7 @@ $ npm install -g iamworkingonit
 $ workingon COMMAND
 running command...
 $ workingon (-v|--version|version)
-iamworkingonit/0.0.0 linux-x64 node-v12.20.1
+iamworkingonit/0.0.0 darwin-x64 node-v15.7.0
 $ workingon --help [COMMAND]
 USAGE
   $ workingon COMMAND
@@ -29,11 +29,14 @@ USAGE
 # Commands
 <!-- commands -->
 * [`workingon [STATUS]`](#workingon-status)
+* [`workingon create`](#workingon-create)
 * [`workingon help [COMMAND]`](#workingon-help-command)
+* [`workingon invite`](#workingon-invite)
 * [`workingon join`](#workingon-join)
 * [`workingon list`](#workingon-list)
 * [`workingon login`](#workingon-login)
 * [`workingon logout`](#workingon-logout)
+* [`workingon open`](#workingon-open)
 * [`workingon show`](#workingon-show)
 
 ## `workingon [STATUS]`
@@ -57,6 +60,19 @@ EXAMPLES
 
 _See code: [src/commands/index.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.0/src/commands/index.ts)_
 
+## `workingon create`
+
+Create new team (if you're not part of one)
+
+```
+USAGE
+  $ workingon create
+
+EXAMPLE
+```
+
+_See code: [src/commands/create.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.0/src/commands/create.ts)_
+
 ## `workingon help [COMMAND]`
 
 display help for workingon
@@ -74,9 +90,22 @@ OPTIONS
 
 _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1/src/commands/help.ts)_
 
+## `workingon invite`
+
+Generate a secret invite token to allow other uses to join your team
+
+```
+USAGE
+  $ workingon invite
+
+EXAMPLE
+```
+
+_See code: [src/commands/invite.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.0/src/commands/invite.ts)_
+
 ## `workingon join`
 
-Join a team if you know the ID
+Join a team using an invite token
 
 ```
 USAGE
@@ -89,7 +118,7 @@ EXAMPLE
 
   Here's what you can do next:
   - $ workingon list
-  - $ workingon status
+  - $ workingon "Refactoring dashboard"
 ```
 
 _See code: [src/commands/join.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.0/src/commands/join.ts)_
@@ -147,6 +176,17 @@ EXAMPLE
 ```
 
 _See code: [src/commands/logout.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.0/src/commands/logout.ts)_
+
+## `workingon open`
+
+Open the iamworkingon.it dashboard
+
+```
+USAGE
+  $ workingon open
+```
+
+_See code: [src/commands/open.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.0/src/commands/open.ts)_
 
 ## `workingon show`
 

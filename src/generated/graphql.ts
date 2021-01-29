@@ -78,7 +78,7 @@ export type User = {
   /** Password of a user */
   password: Scalars['String'];
   team?: Maybe<Team>;
-  statusupdates?: Maybe<Statusupdate>;
+  statusupdates?: Maybe<Array<Statusupdate>>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
@@ -91,7 +91,6 @@ export type LoginOutput = {
 export type Query = {
   __typename?: 'Query';
   user: User;
-  teams: Array<Team>;
   team: Team;
   statusupdates: Array<Statusupdate>;
 };
@@ -103,13 +102,18 @@ export type QueryUserArgs = {
 
 
 export type QueryTeamArgs = {
-  id: Scalars['String'];
+  queryTeamInput?: Maybe<QueryTeamInput>;
 };
 
 
 export type QueryStatusupdatesArgs = {
+  teamId?: Maybe<Scalars['String']>;
   limit?: Maybe<Scalars['Int']>;
   userId?: Maybe<Scalars['String']>;
+};
+
+export type QueryTeamInput = {
+  limit: Scalars['Int'];
 };
 
 export type Mutation = {
@@ -120,8 +124,6 @@ export type Mutation = {
   joinTeam: User;
   createTeam: Team;
   generateSecret: Teamsecret;
-  updateTeam: Team;
-  removeTeam: Team;
   createStatusupdate: Statusupdate;
 };
 
@@ -148,16 +150,6 @@ export type MutationJoinTeamArgs = {
 
 export type MutationCreateTeamArgs = {
   createTeamInput: CreateTeamInput;
-};
-
-
-export type MutationUpdateTeamArgs = {
-  updateTeamInput: UpdateTeamInput;
-};
-
-
-export type MutationRemoveTeamArgs = {
-  id: Scalars['String'];
 };
 
 
@@ -191,11 +183,6 @@ export type JoinTeamInput = {
 export type CreateTeamInput = {
   /** Team Name */
   teamName: Scalars['String'];
-};
-
-export type UpdateTeamInput = {
-  teamName: Scalars['String'];
-  id: Scalars['String'];
 };
 
 export type CreateStatusupdateInput = {
@@ -295,7 +282,7 @@ export type SignupMutation = (
 );
 
 export type StatusupdatesQueryVariables = Exact<{
-  userId?: Maybe<Scalars['String']>;
+  userId: Scalars['String'];
   limit?: Maybe<Scalars['Int']>;
 }>;
 
@@ -313,6 +300,27 @@ export type StatusupdatesQuery = (
       & Pick<Team, 'id' | 'teamName'>
     )> }
   )> }
+);
+
+export type TeamQueryVariables = Exact<{
+  limit?: Scalars['Int'];
+}>;
+
+
+export type TeamQuery = (
+  { __typename?: 'Query' }
+  & { team: (
+    { __typename?: 'Team' }
+    & Pick<Team, 'teamName'>
+    & { users: Array<(
+      { __typename?: 'User' }
+      & Pick<User, 'id' | 'firstName' | 'lastName' | 'email'>
+      & { statusupdates?: Maybe<Array<(
+        { __typename?: 'Statusupdate' }
+        & Pick<Statusupdate, 'id' | 'createdAt' | 'status'>
+      )>> }
+    )> }
+  ) }
 );
 
 export type UserQueryVariables = Exact<{
@@ -399,7 +407,7 @@ export const SignupDocument = gql`
 }
     `;
 export const StatusupdatesDocument = gql`
-    query Statusupdates($userId: String, $limit: Int) {
+    query Statusupdates($userId: String!, $limit: Int = 1) {
   statusupdates(userId: $userId, limit: $limit) {
     createdAt
     status
@@ -411,6 +419,24 @@ export const StatusupdatesDocument = gql`
     team {
       id
       teamName
+    }
+  }
+}
+    `;
+export const TeamDocument = gql`
+    query Team($limit: Int! = 2) {
+  team(queryTeamInput: {limit: $limit}) {
+    teamName
+    users {
+      id
+      firstName
+      lastName
+      email
+      statusupdates {
+        id
+        createdAt
+        status
+      }
     }
   }
 }
@@ -457,8 +483,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     Signup(variables: SignupMutationVariables, requestHeaders?: Headers): Promise<SignupMutation> {
       return withWrapper(() => client.request<SignupMutation>(print(SignupDocument), variables, requestHeaders));
     },
-    Statusupdates(variables?: StatusupdatesQueryVariables, requestHeaders?: Headers): Promise<StatusupdatesQuery> {
+    Statusupdates(variables: StatusupdatesQueryVariables, requestHeaders?: Headers): Promise<StatusupdatesQuery> {
       return withWrapper(() => client.request<StatusupdatesQuery>(print(StatusupdatesDocument), variables, requestHeaders));
+    },
+    Team(variables?: TeamQueryVariables, requestHeaders?: Headers): Promise<TeamQuery> {
+      return withWrapper(() => client.request<TeamQuery>(print(TeamDocument), variables, requestHeaders));
     },
     User(variables: UserQueryVariables, requestHeaders?: Headers): Promise<UserQuery> {
       return withWrapper(() => client.request<UserQuery>(print(UserDocument), variables, requestHeaders));

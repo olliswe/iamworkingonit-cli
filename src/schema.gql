@@ -70,7 +70,7 @@ type User {
   """Password of a user"""
   password: String!
   team: Team
-  statusupdates: Statusupdate
+  statusupdates: [Statusupdate!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -81,9 +81,12 @@ type LoginOutput {
 
 type Query {
   user(id: String!): User!
-  teams: [Team!]!
-  team(id: String!): Team!
-  statusupdates(limit: Int, userId: String): [Statusupdate!]!
+  team(queryTeamInput: QueryTeamInput): Team!
+  statusupdates(teamId: String, limit: Int, userId: String): [Statusupdate!]!
+}
+
+input QueryTeamInput {
+  limit: Int!
 }
 
 type Mutation {
@@ -93,8 +96,6 @@ type Mutation {
   joinTeam(joinTeamInput: JoinTeamInput!): User!
   createTeam(createTeamInput: CreateTeamInput!): Team!
   generateSecret: Teamsecret!
-  updateTeam(updateTeamInput: UpdateTeamInput!): Team!
-  removeTeam(id: String!): Team!
   createStatusupdate(createStatusupdateInput: CreateStatusupdateInput!): Statusupdate!
 }
 
@@ -128,11 +129,6 @@ input JoinTeamInput {
 input CreateTeamInput {
   """Team Name"""
   teamName: String!
-}
-
-input UpdateTeamInput {
-  teamName: String!
-  id: String!
 }
 
 input CreateStatusupdateInput {
