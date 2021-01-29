@@ -63,6 +63,9 @@ export const addStatusUpdate = async (status: string) => {
 export const getLatestStatusUpdate = async () => {
     try {
         const { sdk, userId } = await GqlSdk()
+        if (!userId) {
+            throw STD_ERRORS.AUTH_ERROR
+        }
         const { statusupdates } = await sdk.Statusupdates({ userId, limit: 1 })
         return { data: statusupdates }
     } catch (e) {
