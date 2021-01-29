@@ -282,7 +282,7 @@ export type SignupMutation = (
 );
 
 export type StatusupdatesQueryVariables = Exact<{
-  userId?: Maybe<Scalars['String']>;
+  userId: Scalars['String'];
   limit?: Maybe<Scalars['Int']>;
 }>;
 
@@ -302,7 +302,9 @@ export type StatusupdatesQuery = (
   )> }
 );
 
-export type TeamQueryVariables = Exact<{ [key: string]: never; }>;
+export type TeamQueryVariables = Exact<{
+  limit?: Scalars['Int'];
+}>;
 
 
 export type TeamQuery = (
@@ -312,10 +314,10 @@ export type TeamQuery = (
     & Pick<Team, 'teamName'>
     & { users: Array<(
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'email' | 'firstName' | 'lastName'>
+      & Pick<User, 'id' | 'firstName' | 'lastName' | 'email'>
       & { statusupdates?: Maybe<Array<(
         { __typename?: 'Statusupdate' }
-        & Pick<Statusupdate, 'id' | 'status' | 'createdAt'>
+        & Pick<Statusupdate, 'id' | 'createdAt' | 'status'>
       )>> }
     )> }
   ) }
@@ -405,7 +407,7 @@ export const SignupDocument = gql`
 }
     `;
 export const StatusupdatesDocument = gql`
-    query Statusupdates($userId: String = "00b64f3c-d549-4dbe-8144-8246cfc46143", $limit: Int = 1) {
+    query Statusupdates($userId: String!, $limit: Int = 1) {
   statusupdates(userId: $userId, limit: $limit) {
     createdAt
     status
@@ -422,18 +424,18 @@ export const StatusupdatesDocument = gql`
 }
     `;
 export const TeamDocument = gql`
-    query Team {
-  team {
+    query Team($limit: Int! = 2) {
+  team(queryTeamInput: {limit: $limit}) {
     teamName
     users {
       id
-      email
       firstName
       lastName
+      email
       statusupdates {
         id
-        status
         createdAt
+        status
       }
     }
   }
@@ -481,7 +483,7 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     Signup(variables: SignupMutationVariables, requestHeaders?: Headers): Promise<SignupMutation> {
       return withWrapper(() => client.request<SignupMutation>(print(SignupDocument), variables, requestHeaders));
     },
-    Statusupdates(variables?: StatusupdatesQueryVariables, requestHeaders?: Headers): Promise<StatusupdatesQuery> {
+    Statusupdates(variables: StatusupdatesQueryVariables, requestHeaders?: Headers): Promise<StatusupdatesQuery> {
       return withWrapper(() => client.request<StatusupdatesQuery>(print(StatusupdatesDocument), variables, requestHeaders));
     },
     Team(variables?: TeamQueryVariables, requestHeaders?: Headers): Promise<TeamQuery> {

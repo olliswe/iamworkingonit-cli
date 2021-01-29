@@ -73,7 +73,7 @@ export const getLatestStatusUpdate = async () => {
 export const getTeam = async () => {
     try {
         const { sdk, userId } = await GqlSdk()
-        const { team } = await sdk.Team()
+        const { team } = await sdk.Team({ limit: 1 })
         return { data: team }
     } catch (e) {
         return { error: e }
