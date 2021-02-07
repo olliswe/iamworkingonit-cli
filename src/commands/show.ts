@@ -22,10 +22,10 @@ export default class Show extends Command {
 
         const { data, error } = await getLatestStatusUpdate()
 
-        if (!data || error) {
+        if (error) {
             this.error(error || STD_ERRORS.OOPS_ERROR)
         }
-        if (data.length === 0) {
+        if (!data || data.length === 0) {
             this.error(`You don't have any status updates yet!
 You can add a new one like this:
 $ workingon "GraphQL queries"

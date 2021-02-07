@@ -1,17 +1,29 @@
-# you can query `team` also without any input: team {...fields}
-# limit is default 1 on the backend
-query Team($limit: Int!) {
-  team(queryTeamInput: {limit: $limit}) {
+query Team {
+  team {
+    id
     teamName
+    statusupdates(limit: 50) {
+      status
+      createdAt
+      id
+      user {
+        email
+        firstName
+        lastName
+      }
+    }
     users {
       id
+      email
       firstName
       lastName
-      email
-      statusupdates {
+      statusupdates(limit: 1) {
         id
         createdAt
         status
+        team {
+          teamName
+        }
       }
     }
   }

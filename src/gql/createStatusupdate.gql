@@ -11,6 +11,7 @@ mutation CreateStatusupdate($status: String!){
     updatedAt
     user {
       id
+      email
       firstName
       lastName
     }
