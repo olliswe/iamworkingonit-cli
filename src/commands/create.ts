@@ -1,5 +1,5 @@
 import { Command } from '@oclif/command'
-import { createTeam, getUser } from '../helpers/queries'
+import { createTeam, getMe } from '../helpers/queries'
 import { STD_ERRORS } from '../config'
 import cli from 'cli-ux'
 
@@ -13,7 +13,7 @@ export default class Create extends Command {
     static args = []
 
     async run() {
-        const { data, error } = await getUser()
+        const { data, error } = await getMe()
         if (error || !data) {
             this.error(error || STD_ERRORS.OOPS_ERROR)
         }

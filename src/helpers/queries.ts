@@ -62,12 +62,9 @@ export const addStatusUpdate = async (status: string) => {
 
 export const getLatestStatusUpdate = async () => {
     try {
-        const { sdk, userId } = await GqlSdk()
-        if (!userId) {
-            throw STD_ERRORS.AUTH_ERROR
-        }
-        const { statusupdates } = await sdk.Statusupdates({ userId, limit: 1 })
-        return { data: statusupdates }
+        const { sdk } = await GqlSdk()
+        const { user } = await sdk.User()
+        return { data: user.statusupdates }
     } catch (e) {
         return { error: e }
     }
@@ -75,21 +72,18 @@ export const getLatestStatusUpdate = async () => {
 
 export const getTeam = async () => {
     try {
-        const { sdk, userId } = await GqlSdk()
-        const { team } = await sdk.Team({ limit: 1 })
+        const { sdk } = await GqlSdk()
+        const { team } = await sdk.Team()
         return { data: team }
     } catch (e) {
         return { error: e }
     }
 }
 
-export const getUser = async () => {
+export const getMe = async () => {
     try {
-        const { sdk, userId } = await GqlSdk()
-        if (!userId) {
-            throw STD_ERRORS.AUTH_ERROR
-        }
-        const { user } = await sdk.User({ userId })
+        const { sdk } = await GqlSdk()
+        const { user } = await sdk.User()
         return { data: user }
     } catch (error) {
         return { error }

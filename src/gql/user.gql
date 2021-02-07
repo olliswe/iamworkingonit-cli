@@ -1,5 +1,5 @@
-query User($userId: String!) {
-  user(id: $userId) {
+query User {
+  user {
     id
     firstName
     lastName
@@ -10,6 +10,11 @@ query User($userId: String!) {
     team {
       id
       teamName
+    }
+    statusupdates {
+      id
+      createdAt
+      status
     }
   }
 }

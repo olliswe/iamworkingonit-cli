@@ -31,7 +31,7 @@ export default class List extends Command {
         cli.action.stop('Done!')
         this.log('')
 
-        if (!data || error) {
+        if (!data || !data.users || error) {
             this.error(error || STD_ERRORS.OOPS_ERROR)
         }
 
