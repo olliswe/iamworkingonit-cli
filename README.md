@@ -69,6 +69,7 @@ USAGE
   $ workingon create
 
 EXAMPLE
+  $ workingon create
 ```
 
 _See code: [src/commands/create.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.0/src/commands/create.ts)_
@@ -92,13 +93,14 @@ _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v3.2.1
 
 ## `workingon invite`
 
-Generate a secret invite token to allow other uses to join your team
+Invite a user to your team
 
 ```
 USAGE
   $ workingon invite
 
 EXAMPLE
+  $ workingon invite
 ```
 
 _See code: [src/commands/invite.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.0/src/commands/invite.ts)_
