@@ -54,7 +54,9 @@ type Team {
 
   """Users of a Team"""
   users: [User!]
-  secret: Teamsecret!
+
+  """Secrets of a Team"""
+  teamsecrets: [Teamsecret!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -106,7 +108,7 @@ type Mutation {
   joinTeam(joinTeamInput: JoinTeamInput!): User!
   createStatusupdate(createStatusupdateInput: CreateStatusupdateInput!): Statusupdate!
   createTeam(createTeamInput: CreateTeamInput!): Team!
-  generateSecret: Teamsecret!
+  generateSecret(email: String!): Teamsecret!
 }
 
 input CreateUserInput {

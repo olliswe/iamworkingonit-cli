@@ -13,10 +13,6 @@ export default class Show extends Command {
     `,
     ]
 
-    static flags = {}
-
-    static args = []
-
     async run() {
         cli.action.start('Fetching your latest status...')
 

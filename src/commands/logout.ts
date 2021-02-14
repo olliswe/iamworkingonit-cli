@@ -7,10 +7,6 @@ export default class Logout extends Command {
 
     static examples = [`$ workingon logout`]
 
-    static flags = {}
-
-    static args = []
-
     async run() {
         cli.action.start('Logging you out')
         const { success } = await clearTokens()
