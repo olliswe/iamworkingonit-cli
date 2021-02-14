@@ -418,16 +418,20 @@
             "deprecationReason": null
           },
           {
-            "name": "secret",
-            "description": null,
+            "name": "teamsecrets",
+            "description": "Secrets of a Team",
             "args": [],
             "type": {
-              "kind": "NON_NULL",
+              "kind": "LIST",
               "name": null,
               "ofType": {
-                "kind": "OBJECT",
-                "name": "Teamsecret",
-                "ofType": null
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "Teamsecret",
+                  "ofType": null
+                }
               }
             },
             "isDeprecated": false,
@@ -959,7 +963,22 @@
           {
             "name": "generateSecret",
             "description": null,
-            "args": [],
+            "args": [
+              {
+                "name": "email",
+                "description": null,
+                "type": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "String",
+                    "ofType": null
+                  }
+                },
+                "defaultValue": null
+              }
+            ],
             "type": {
               "kind": "NON_NULL",
               "name": null,

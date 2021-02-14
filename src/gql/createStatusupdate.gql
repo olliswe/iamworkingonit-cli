@@ -3,7 +3,7 @@ mutation CreateStatusupdate($status: String!){
     createStatusupdateInput: {
       status: $status
     }
-)
+  )
   {
     id
     status

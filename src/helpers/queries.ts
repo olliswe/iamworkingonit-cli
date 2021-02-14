@@ -6,15 +6,17 @@ import { getToken } from './utils'
 import jwt_decode from 'jwt-decode'
 import { get } from 'lodash'
 
-const GqlSdk = async (withAuth = true) => {
-    let options: Dom.RequestInit | undefined
+const GqlSdk = async (withAuth = true, headers = {}) => {
+    let options: Dom.RequestInit = { headers }
     let userId: string | undefined
     if (withAuth) {
         const { accessToken } = await getToken()
         if (!accessToken) {
             throw STD_ERRORS.AUTH_ERROR
         }
-        options = { headers: { Authorization: `Bearer ${accessToken}` } }
+        options = {
+            headers: { Authorization: `Bearer ${accessToken}`, ...headers },
+        }
         const jwt = jwt_decode(accessToken)
         userId = get(jwt, 'id', '')
     }
@@ -38,9 +40,12 @@ export const signup = async (input: {
     password: string
     firstName: string
     lastName: string
+    signupToken: string
 }) => {
     try {
-        const { sdk } = await GqlSdk(false)
+        const { sdk } = await GqlSdk(false, {
+            'x-signup-token': input.signupToken,
+        })
         const { signup } = await sdk.Signup(input)
         return { data: signup }
     } catch (e) {
@@ -95,6 +100,16 @@ export const createTeam = async (teamName: string) => {
         const { sdk } = await GqlSdk()
         const { createTeam } = await sdk.createTeam({ teamName })
         return { data: createTeam }
+    } catch (e) {
+        return { error: e }
+    }
+}
+
+export const generateSecret = async (email: string) => {
+    try {
+        const { sdk } = await GqlSdk()
+        const { generateSecret } = await sdk.GenerateSecret({ email })
+        return { data: generateSecret }
     } catch (e) {
         return { error: e }
     }

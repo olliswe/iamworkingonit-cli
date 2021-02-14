@@ -6,11 +6,7 @@ import cli from 'cli-ux'
 export default class Create extends Command {
     static description = `Create new team (if you're not part of one)`
 
-    static examples = [``]
-
-    static flags = {}
-
-    static args = []
+    static examples = [`$ workingon create`]
 
     async run() {
         const { data, error } = await getMe()

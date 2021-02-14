@@ -62,7 +62,8 @@ export type Team = {
   statusupdates?: Maybe<Array<Statusupdate>>;
   /** Users of a Team */
   users?: Maybe<Array<User>>;
-  secret: Teamsecret;
+  /** Secrets of a Team */
+  teamsecrets?: Maybe<Array<Teamsecret>>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
@@ -158,6 +159,11 @@ export type MutationCreateTeamArgs = {
   createTeamInput: CreateTeamInput;
 };
 
+
+export type MutationGenerateSecretArgs = {
+  email: Scalars['String'];
+};
+
 export type CreateUserInput = {
   /** User First Name */
   firstName: Scalars['String'];
@@ -224,7 +230,9 @@ export type CreateTeamMutation = (
   ) }
 );
 
-export type GenerateSecretMutationVariables = Exact<{ [key: string]: never; }>;
+export type GenerateSecretMutationVariables = Exact<{
+  email: Scalars['String'];
+}>;
 
 
 export type GenerateSecretMutation = (
@@ -360,8 +368,8 @@ export const CreateTeamDocument = gql`
 }
     `;
 export const GenerateSecretDocument = gql`
-    mutation GenerateSecret {
-  generateSecret {
+    mutation GenerateSecret($email: String!) {
+  generateSecret(email: $email) {
     secret
   }
 }
@@ -464,7 +472,7 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     createTeam(variables: CreateTeamMutationVariables, requestHeaders?: Headers): Promise<CreateTeamMutation> {
       return withWrapper(() => client.request<CreateTeamMutation>(print(CreateTeamDocument), variables, requestHeaders));
     },
-    GenerateSecret(variables?: GenerateSecretMutationVariables, requestHeaders?: Headers): Promise<GenerateSecretMutation> {
+    GenerateSecret(variables: GenerateSecretMutationVariables, requestHeaders?: Headers): Promise<GenerateSecretMutation> {
       return withWrapper(() => client.request<GenerateSecretMutation>(print(GenerateSecretDocument), variables, requestHeaders));
     },
     JoinTeam(variables: JoinTeamMutationVariables, requestHeaders?: Headers): Promise<JoinTeamMutation> {

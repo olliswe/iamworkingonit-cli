@@ -26,7 +26,13 @@ $ workingon logout
 
         const { flags } = this.parse(Login)
 
-        if (flags.signup) console.log('Welcome to iamworkingon.it!')
+        let signupToken = ''
+        if (flags.signup) {
+            console.log('Welcome to iamworkingon.it!')
+            signupToken = await cli.prompt(
+                'To signup you need to first enter the signup token'
+            )
+        }
 
         const email = await cli.prompt('What is your email')
         const password = await cli.prompt('What is your password?', {
@@ -56,11 +62,12 @@ $ workingon logout
                 password,
                 firstName,
                 lastName,
+                signupToken,
             })
 
             if (error || !data) {
                 cli.action.stop('Error')
-                this.error(error.toString() || 'Unable to login!')
+                this.error('Sorry, unable to sign you up!')
             }
         } else {
             cli.action.start('Signing you in to your account...')
@@ -70,7 +77,7 @@ $ workingon logout
 
         if (error || !data) {
             cli.action.stop('Error')
-            this.error(error.toString() || 'Unable to login!')
+            this.error('Unable to login!')
         }
 
         await setToken(data.accessToken)
