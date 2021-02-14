@@ -33,10 +33,12 @@
     "@types/inquirer": "^7.3.1",
     "@types/node": "^10.17.51",
     "debug": "^4.3.1",
+    "env-cmd": "^10.1.0",
     "eslint": "^5.16.0",
     "eslint-config-oclif": "^3.1.0",
     "eslint-config-oclif-typescript": "^0.1.0",
     "globby": "^10.0.2",
+    "np": "^7.4.0",
     "prettier": "^2.2.1",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.7"
@@ -70,7 +72,9 @@
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "test": "echo NO TESTS",
     "version": "oclif-dev readme && git add README.md",
-    "codegen": "graphql-codegen --config codegen.yml"
+    "codegen": "graphql-codegen --config codegen.yml",
+    "dev": "env-cmd -f .env.local ./bin/run",
+    "publish": "np"
   },
   "types": "lib/index.d.ts"
 }
