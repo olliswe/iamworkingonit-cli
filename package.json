@@ -1,10 +1,10 @@
 {
   "name": "iamworkingonit",
   "description": "Let you colleagues know what you're working on",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "iamworkingonit @iamworkingonit",
   "bin": {
-    "workingon": "./bin/run"
+    "workingon": "bin/run"
   },
   "bugs": "https://github.com/olliswe/iamworkingonit-cli/issues",
   "dependencies": {
