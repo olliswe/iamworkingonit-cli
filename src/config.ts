@@ -3,7 +3,7 @@ import * as os from 'os'
 
 export const STORAGE_FILE = path.join(os.homedir(), '.workingon')
 
-export const API_URL = 'http://localhost:3000'
+export const API_URL = 'https://iamworkingonit.herokuapp.com'
 export const GRAPHQL_URL = API_URL + '/graphql'
 
 export const STD_ERRORS = {

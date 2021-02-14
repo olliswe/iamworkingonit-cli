@@ -1,8 +1,8 @@
 {
   "name": "iamworkingonit",
   "description": "Let you colleagues know what you're working on",
-  "version": "0.0.0",
-  "author": "olliswe @olliswe",
+  "version": "0.0.1",
+  "author": "iamworkingonit @iamworkingonit",
   "bin": {
     "workingon": "./bin/run"
   },
