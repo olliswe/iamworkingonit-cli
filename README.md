@@ -19,7 +19,7 @@ $ npm install -g iamworkingonit
 $ workingon COMMAND
 running command...
 $ workingon (-v|--version|version)
-iamworkingonit/0.0.8 darwin-x64 node-v15.7.0
+iamworkingonit/0.0.9 darwin-x64 node-v15.7.0
 $ workingon --help [COMMAND]
 USAGE
   $ workingon COMMAND
@@ -29,7 +29,6 @@ USAGE
 # Commands
 <!-- commands -->
 * [`workingon [STATUS]`](#workingon-status)
-* [`workingon autocomplete [SHELL]`](#workingon-autocomplete-shell)
 * [`workingon create`](#workingon-create)
 * [`workingon help [COMMAND]`](#workingon-help-command)
 * [`workingon invite`](#workingon-invite)
@@ -59,30 +58,7 @@ EXAMPLES
   $ workingon --clear
 ```
 
-_See code: [src/commands/index.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.8/src/commands/index.ts)_
-
-## `workingon autocomplete [SHELL]`
-
-display autocomplete installation instructions
-
-```
-USAGE
-  $ workingon autocomplete [SHELL]
-
-ARGUMENTS
-  SHELL  shell type
-
-OPTIONS
-  -r, --refresh-cache  Refresh cache (ignores displaying instructions)
-
-EXAMPLES
-  $ workingon autocomplete
-  $ workingon autocomplete bash
-  $ workingon autocomplete zsh
-  $ workingon autocomplete --refresh-cache
-```
-
-_See code: [@oclif/plugin-autocomplete](https://github.com/oclif/plugin-autocomplete/blob/v0.3.0/src/commands/autocomplete/index.ts)_
+_See code: [src/commands/index.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.9/src/commands/index.ts)_
 
 ## `workingon create`
 
@@ -96,7 +72,7 @@ EXAMPLE
   $ workingon create
 ```
 
-_See code: [src/commands/create.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.8/src/commands/create.ts)_
+_See code: [src/commands/create.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.9/src/commands/create.ts)_
 
 ## `workingon help [COMMAND]`
 
@@ -127,7 +103,7 @@ EXAMPLE
   $ workingon invite
 ```
 
-_See code: [src/commands/invite.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.8/src/commands/invite.ts)_
+_See code: [src/commands/invite.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.9/src/commands/invite.ts)_
 
 ## `workingon join`
 
@@ -147,7 +123,7 @@ EXAMPLE
   - $ workingon "Refactoring dashboard"
 ```
 
-_See code: [src/commands/join.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.8/src/commands/join.ts)_
+_See code: [src/commands/join.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.9/src/commands/join.ts)_
 
 ## `workingon list`
 
@@ -169,7 +145,7 @@ EXAMPLE
   +------------------+-------------------------+-------------+
 ```
 
-_See code: [src/commands/list.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.8/src/commands/list.ts)_
+_See code: [src/commands/list.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.9/src/commands/list.ts)_
 
 ## `workingon login`
 
@@ -187,7 +163,7 @@ EXAMPLES
   $ workingon login --signup
 ```
 
-_See code: [src/commands/login.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.8/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.9/src/commands/login.ts)_
 
 ## `workingon logout`
 
@@ -201,7 +177,7 @@ EXAMPLE
   $ workingon logout
 ```
 
-_See code: [src/commands/logout.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.8/src/commands/logout.ts)_
+_See code: [src/commands/logout.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.9/src/commands/logout.ts)_
 
 ## `workingon open`
 
@@ -212,7 +188,7 @@ USAGE
   $ workingon open
 ```
 
-_See code: [src/commands/open.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.8/src/commands/open.ts)_
+_See code: [src/commands/open.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.9/src/commands/open.ts)_
 
 ## `workingon show`
 
@@ -227,5 +203,5 @@ EXAMPLE
   "Refactoring tests"   15hrs ago
 ```
 
-_See code: [src/commands/show.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.8/src/commands/show.ts)_
+_See code: [src/commands/show.ts](https://github.com/olliswe/iamworkingonit-cli/blob/v0.0.9/src/commands/show.ts)_
 <!-- commandsstop -->
