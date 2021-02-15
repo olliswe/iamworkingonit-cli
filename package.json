@@ -79,7 +79,7 @@
     "version": "oclif-dev readme && git add README.md",
     "codegen": "graphql-codegen --config codegen.yml",
     "dev": "env-cmd -f .env.local ./bin/run",
-    "publish": "np"
+    "release": "np"
   },
   "types": "lib/index.d.ts"
 }
