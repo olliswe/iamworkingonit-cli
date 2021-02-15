@@ -10,7 +10,9 @@
   "dependencies": {
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
+    "@oclif/plugin-autocomplete": "^0.3.0",
     "@oclif/plugin-help": "^3.2.1",
+    "@oclif/plugin-warn-if-update-available": "^1.7.0",
     "@types/lodash": "^4.14.168",
     "cli-ux": "^5.5.1",
     "date-fns": "^2.16.1",
@@ -62,12 +64,15 @@
     "commands": "./lib/commands",
     "bin": "workingon",
     "plugins": [
-      "@oclif/plugin-help"
+      "@oclif/plugin-help",
+      "@oclif/plugin-warn-if-update-available",
+      "@oclif/plugin-autocomplete"
     ]
   },
   "repository": "olliswe/iamworkingonit-cli",
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
+    "postpublish": "git push --tags",
     "posttest": "echo NO POSTTEST",
     "prepack": "rm -rf lib && tsc -b && oclif-dev manifest && oclif-dev readme",
     "test": "echo NO TESTS",
