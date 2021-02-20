@@ -1,6 +1,6 @@
 import { Command } from '@oclif/command'
 import { getTeam } from '../helpers/queries'
-import { STD_ERRORS } from '../config'
+import { STD_ERRORS, UPDATE_TYPES } from '../config'
 import cli from 'cli-ux'
 import { getTimeSince } from '../helpers/utils'
 
@@ -42,6 +42,8 @@ export default class List extends Command {
                 : undefined,
         }))
 
+        console.log(tableData)
+
         this.log(`Team ${data.teamName}:`)
 
         cli.table(tableData, {
@@ -53,8 +55,16 @@ export default class List extends Command {
             status: {
                 header: 'Status',
                 get: (row) =>
-                    row.statusUpdate ? `"${row.statusUpdate.status}"` : 'none',
+                    row.statusUpdate &&
+                    row.statusUpdate?.updatetype?.type !== UPDATE_TYPES.CLEAR
+                        ? `"${row.statusUpdate.status}"`
+                        : 'none',
                 minWidth: 40,
+            },
+            updatetype: {
+                header: 'Type',
+                get: (row) => row.statusUpdate?.updatetype?.type || '-',
+                minWidth: 10,
             },
             latestUpdate: {
                 header: 'Latest update',
