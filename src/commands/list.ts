@@ -42,8 +42,6 @@ export default class List extends Command {
                 : undefined,
         }))
 
-        console.log(tableData)
-
         this.log(`Team ${data.teamName}:`)
 
         cli.table(tableData, {
