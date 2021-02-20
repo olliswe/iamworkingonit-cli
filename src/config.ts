@@ -18,3 +18,9 @@ $ workingon --help`),
 
 export const ACCESS_TOKEN_PATH = 'workingonAccessToken'
 export const DEFAULT_USER = 'default'
+
+export enum UPDATE_TYPES {
+    CLEAR = 'CLEAR',
+    GIT = 'GIT',
+    DEFAULT = 'DEFAULT',
+}
