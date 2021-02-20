@@ -6,6 +6,9 @@ query Team {
       status
       createdAt
       id
+      updatetype {
+        type
+      }
       user {
         email
         firstName
@@ -21,6 +24,9 @@ query Team {
         id
         createdAt
         status
+        updatetype {
+          type
+        }
         team {
           teamName
         }

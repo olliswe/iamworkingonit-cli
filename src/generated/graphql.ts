@@ -22,7 +22,8 @@ export type Updatetype = {
   id: Scalars['String'];
   /** Content of Update Type */
   type: Scalars['String'];
-  statusupdates: Array<Statusupdate>;
+  /** Description of Update Type */
+  description?: Maybe<Scalars['String']>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
@@ -34,7 +35,7 @@ export type Statusupdate = {
   id: Scalars['String'];
   /** Content of Status Update */
   status: Scalars['String'];
-  updatetype: Updatetype;
+  updatetype?: Maybe<Updatetype>;
   user?: Maybe<User>;
   team?: Maybe<Team>;
   createdAt: Scalars['DateTime'];
@@ -62,8 +63,6 @@ export type Team = {
   statusupdates?: Maybe<Array<Statusupdate>>;
   /** Users of a Team */
   users?: Maybe<Array<User>>;
-  /** Secrets of a Team */
-  teamsecrets?: Maybe<Array<Teamsecret>>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
@@ -85,8 +84,6 @@ export type User = {
   lastName: Scalars['String'];
   /** Email of user */
   email: Scalars['String'];
-  /** Password of a user */
-  password: Scalars['String'];
   team?: Maybe<Team>;
   statusupdates?: Maybe<Array<Statusupdate>>;
   createdAt: Scalars['DateTime'];
@@ -106,6 +103,8 @@ export type LoginOutput = {
 export type Query = {
   __typename?: 'Query';
   user: User;
+  /** Get all available updatetypes */
+  updatetypes: Array<Updatetype>;
   team: Team;
 };
 
@@ -122,6 +121,8 @@ export type Mutation = {
   __typename?: 'Mutation';
   signup: User;
   login: LoginOutput;
+  getResetToken: Scalars['Boolean'];
+  resetPassword: Scalars['Boolean'];
   createUser: User;
   joinTeam: User;
   createStatusupdate: Statusupdate;
@@ -137,6 +138,16 @@ export type MutationSignupArgs = {
 
 export type MutationLoginArgs = {
   loginInput: LoginInput;
+};
+
+
+export type MutationGetResetTokenArgs = {
+  getResetTokenInput: GetResetTokenInput;
+};
+
+
+export type MutationResetPasswordArgs = {
+  resetPasswordInput: ResetPasswordInput;
 };
 
 
@@ -182,6 +193,18 @@ export type LoginInput = {
   password: Scalars['String'];
 };
 
+export type GetResetTokenInput = {
+  /** User Email */
+  email: Scalars['String'];
+};
+
+export type ResetPasswordInput = {
+  /** New Password */
+  password: Scalars['String'];
+  /** Reset Password Token */
+  token: Scalars['String'];
+};
+
 export type JoinTeamInput = {
   /** Current Secret of Team */
   secret: Scalars['String'];
@@ -190,6 +213,8 @@ export type JoinTeamInput = {
 export type CreateStatusupdateInput = {
   /** Content of Status Update */
   status: Scalars['String'];
+  /** Type of Status Update */
+  updatetype?: Maybe<Scalars['String']>;
 };
 
 export type CreateTeamInput = {
@@ -199,6 +224,7 @@ export type CreateTeamInput = {
 
 export type CreateStatusupdateMutationVariables = Exact<{
   status: Scalars['String'];
+  updatetype?: Maybe<Scalars['String']>;
 }>;
 
 
@@ -301,7 +327,10 @@ export type TeamQuery = (
     & { statusupdates?: Maybe<Array<(
       { __typename?: 'Statusupdate' }
       & Pick<Statusupdate, 'status' | 'createdAt' | 'id'>
-      & { user?: Maybe<(
+      & { updatetype?: Maybe<(
+        { __typename?: 'Updatetype' }
+        & Pick<Updatetype, 'type'>
+      )>, user?: Maybe<(
         { __typename?: 'User' }
         & Pick<User, 'email' | 'firstName' | 'lastName'>
       )> }
@@ -311,13 +340,27 @@ export type TeamQuery = (
       & { statusupdates?: Maybe<Array<(
         { __typename?: 'Statusupdate' }
         & Pick<Statusupdate, 'id' | 'createdAt' | 'status'>
-        & { team?: Maybe<(
+        & { updatetype?: Maybe<(
+          { __typename?: 'Updatetype' }
+          & Pick<Updatetype, 'type'>
+        )>, team?: Maybe<(
           { __typename?: 'Team' }
           & Pick<Team, 'teamName'>
         )> }
       )>> }
     )>> }
   ) }
+);
+
+export type UpdatetypesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UpdatetypesQuery = (
+  { __typename?: 'Query' }
+  & { updatetypes: Array<(
+    { __typename?: 'Updatetype' }
+    & Pick<Updatetype, 'type' | 'description'>
+  )> }
 );
 
 export type UserQueryVariables = Exact<{ [key: string]: never; }>;
@@ -334,14 +377,20 @@ export type UserQuery = (
     )>, statusupdates?: Maybe<Array<(
       { __typename?: 'Statusupdate' }
       & Pick<Statusupdate, 'id' | 'createdAt' | 'status'>
+      & { updatetype?: Maybe<(
+        { __typename?: 'Updatetype' }
+        & Pick<Updatetype, 'type'>
+      )> }
     )>> }
   ) }
 );
 
 
 export const CreateStatusupdateDocument = gql`
-    mutation CreateStatusupdate($status: String!) {
-  createStatusupdate(createStatusupdateInput: {status: $status}) {
+    mutation CreateStatusupdate($status: String!, $updatetype: String) {
+  createStatusupdate(
+    createStatusupdateInput: {status: $status, updatetype: $updatetype}
+  ) {
     id
     status
     createdAt
@@ -414,6 +463,9 @@ export const TeamDocument = gql`
       status
       createdAt
       id
+      updatetype {
+        type
+      }
       user {
         email
         firstName
@@ -429,11 +481,22 @@ export const TeamDocument = gql`
         id
         createdAt
         status
+        updatetype {
+          type
+        }
         team {
           teamName
         }
       }
     }
+  }
+}
+    `;
+export const UpdatetypesDocument = gql`
+    query Updatetypes {
+  updatetypes {
+    type
+    description
   }
 }
     `;
@@ -455,6 +518,9 @@ export const UserDocument = gql`
       id
       createdAt
       status
+      updatetype {
+        type
+      }
     }
   }
 }
@@ -486,6 +552,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     Team(variables?: TeamQueryVariables, requestHeaders?: Headers): Promise<TeamQuery> {
       return withWrapper(() => client.request<TeamQuery>(print(TeamDocument), variables, requestHeaders));
+    },
+    Updatetypes(variables?: UpdatetypesQueryVariables, requestHeaders?: Headers): Promise<UpdatetypesQuery> {
+      return withWrapper(() => client.request<UpdatetypesQuery>(print(UpdatetypesDocument), variables, requestHeaders));
     },
     User(variables?: UserQueryVariables, requestHeaders?: Headers): Promise<UserQuery> {
       return withWrapper(() => client.request<UserQuery>(print(UserDocument), variables, requestHeaders));
