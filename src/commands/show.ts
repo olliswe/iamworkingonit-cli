@@ -33,7 +33,9 @@ $ workingon "GraphQL queries"
 
         this.log(
             `
-  "${statusUpdate.status}"        ${getTimeSince(statusUpdate.createdAt)}`
+  ${statusUpdate.updatetype?.type || '-'}        "${
+                statusUpdate.status
+            }"        ${getTimeSince(statusUpdate.createdAt)}`
         )
     }
 }

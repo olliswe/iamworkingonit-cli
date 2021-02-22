@@ -1,6 +1,6 @@
 import * as Dom from 'graphql-request/dist/types.dom'
 import { GraphQLClient } from 'graphql-request'
-import { GRAPHQL_URL, STD_ERRORS } from '../config'
+import { GRAPHQL_URL, STD_ERRORS, UPDATE_TYPES } from '../config'
 import { getSdk } from '../generated/graphql'
 import { getToken } from './utils'
 import jwt_decode from 'jwt-decode'
@@ -58,6 +58,19 @@ export const addStatusUpdate = async (status: string) => {
         const { sdk } = await GqlSdk()
         const { createStatusupdate } = await sdk.CreateStatusupdate({
             status,
+        })
+        return { data: createStatusupdate }
+    } catch (e) {
+        return { error: e }
+    }
+}
+
+export const clearStatus = async () => {
+    try {
+        const { sdk } = await GqlSdk()
+        const { createStatusupdate } = await sdk.CreateStatusupdate({
+            status: '',
+            updatetype: UPDATE_TYPES.CLEAR,
         })
         return { data: createStatusupdate }
     } catch (e) {

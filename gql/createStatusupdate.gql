@@ -1,7 +1,8 @@
-mutation CreateStatusupdate($status: String!){
+mutation CreateStatusupdate($status: String!, $updatetype: String){
   createStatusupdate(
     createStatusupdateInput: {
       status: $status
+      updatetype: $updatetype
     }
   )
   {

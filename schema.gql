@@ -8,7 +8,9 @@ type Updatetype {
 
   """Content of Update Type"""
   type: String!
-  statusupdates: [Statusupdate!]!
+
+  """Description of Update Type"""
+  description: String
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -24,7 +26,7 @@ type Statusupdate {
 
   """Content of Status Update"""
   status: String!
-  updatetype: Updatetype!
+  updatetype: Updatetype
   user: User
   team: Team
   createdAt: DateTime!
@@ -54,9 +56,6 @@ type Team {
 
   """Users of a Team"""
   users: [User!]
-
-  """Secrets of a Team"""
-  teamsecrets: [Teamsecret!]
   createdAt: DateTime!
   updatedAt: DateTime!
 }
@@ -76,9 +75,6 @@ type User {
 
   """Email of user"""
   email: String!
-
-  """Password of a user"""
-  password: String!
   team: Team
   statusupdates(
     """defaults to 10"""
@@ -94,6 +90,9 @@ type LoginOutput {
 
 type Query {
   user: User!
+
+  """Get all available updatetypes"""
+  updatetypes: [Updatetype!]!
   team(queryTeamInput: QueryTeamInput): Team!
 }
 
@@ -104,6 +103,8 @@ input QueryTeamInput {
 type Mutation {
   signup(createUserInput: CreateUserInput!): User!
   login(loginInput: LoginInput!): LoginOutput!
+  getResetToken(getResetTokenInput: GetResetTokenInput!): Boolean!
+  resetPassword(resetPasswordInput: ResetPasswordInput!): Boolean!
   createUser(createUserInput: CreateUserInput!): User!
   joinTeam(joinTeamInput: JoinTeamInput!): User!
   createStatusupdate(createStatusupdateInput: CreateStatusupdateInput!): Statusupdate!
@@ -133,6 +134,19 @@ input LoginInput {
   password: String!
 }
 
+input GetResetTokenInput {
+  """User Email"""
+  email: String!
+}
+
+input ResetPasswordInput {
+  """New Password"""
+  password: String!
+
+  """Reset Password Token"""
+  token: String!
+}
+
 input JoinTeamInput {
   """Current Secret of Team"""
   secret: String!
@@ -141,6 +155,9 @@ input JoinTeamInput {
 input CreateStatusupdateInput {
   """Content of Status Update"""
   status: String!
+
+  """Type of Status Update"""
+  updatetype: String
 }
 
 input CreateTeamInput {

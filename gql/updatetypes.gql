@@ -1,0 +1,6 @@
+query Updatetypes {
+  updatetypes {
+    type
+    description
+  }
+}
