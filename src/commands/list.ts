@@ -1,5 +1,5 @@
 import { Command } from '@oclif/command'
-import { getTeam } from '../helpers/queries'
+import queries, { getTeam } from '../helpers/queries'
 import { STD_ERRORS, UPDATE_TYPES } from '../config'
 import cli from 'cli-ux'
 import { getTimeSince } from '../helpers/utils'
@@ -27,7 +27,7 @@ export default class List extends Command {
 
     async run() {
         cli.action.start('Fetching data...')
-        const { data, error } = await getTeam()
+        const { data, error } = await queries.getTeam()
         cli.action.stop('Done!')
         this.log('')
 

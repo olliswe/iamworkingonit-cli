@@ -5,6 +5,8 @@ import { getSdk } from '../generated/graphql'
 import { getToken } from './utils'
 import jwt_decode from 'jwt-decode'
 import { get } from 'lodash'
+import loginAgain from './loginAgain'
+import { cli } from 'cli-ux'
 
 const GqlSdk = async (withAuth = true, headers = {}) => {
     let options: Dom.RequestInit = { headers }
@@ -15,7 +17,7 @@ const GqlSdk = async (withAuth = true, headers = {}) => {
             throw STD_ERRORS.AUTH_ERROR
         }
         options = {
-            headers: { Authorization: `Bearer ${accessToken}`, ...headers },
+            headers: { Authorization: `Bearer ${accessToken}s`, ...headers },
         }
         const jwt = jwt_decode(accessToken)
         userId = get(jwt, 'id', '')
@@ -137,3 +139,37 @@ export const joinTeam = async (secret: string) => {
         return { error: e }
     }
 }
+
+const withErrorCheck = <TArgs extends Array<any>, TData>(
+    fn: (...args: TArgs) => Promise<{ data?: TData; error?: any }>
+) => {
+    return async (...args: TArgs): Promise<{ data?: TData; error?: any }> => {
+        const res = await fn(...args)
+        if (!res.error) {
+            return res
+        }
+        const errors = get(res.error, 'response.errors')
+        if (!Array.isArray(errors) || errors.length !== 1) {
+            return res
+        }
+        const statusCode = get(errors[0], 'extensions.exception.status', '')
+        if (statusCode !== 401) {
+            return res
+        }
+        await loginAgain()
+        return await fn(...args)
+    }
+}
+
+const queries = {
+    addStatusUpdate: withErrorCheck(addStatusUpdate),
+    clearStatus: withErrorCheck(clearStatus),
+    getLatestStatusUpdate: withErrorCheck(getLatestStatusUpdate),
+    getTeam: withErrorCheck(getTeam),
+    getMe: withErrorCheck(getMe),
+    createTeam: withErrorCheck(createTeam),
+    generateSecret: withErrorCheck(generateSecret),
+    joinTeam: withErrorCheck(joinTeam),
+}
+
+export default queries
