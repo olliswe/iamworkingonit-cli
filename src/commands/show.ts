@@ -1,6 +1,6 @@
 import { Command } from '@oclif/command'
 import cli from 'cli-ux'
-import { getLatestStatusUpdate } from '../helpers/queries'
+import queries from '../helpers/queries'
 import { STD_ERRORS } from '../config'
 import { getTimeSince } from '../helpers/utils'
 
@@ -16,7 +16,7 @@ export default class Show extends Command {
     async run() {
         cli.action.start('Fetching your latest status...')
 
-        const { data, error } = await getLatestStatusUpdate()
+        const { data, error } = await queries.getLatestStatusUpdate()
 
         if (error) {
             this.error(error || STD_ERRORS.OOPS_ERROR)
