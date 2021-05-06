@@ -6,7 +6,6 @@ import { getToken } from './utils'
 import jwt_decode from 'jwt-decode'
 import { get } from 'lodash'
 import loginAgain from './loginAgain'
-import { cli } from 'cli-ux'
 
 const GqlSdk = async (withAuth = true, headers = {}) => {
     let options: Dom.RequestInit = { headers }
@@ -17,7 +16,7 @@ const GqlSdk = async (withAuth = true, headers = {}) => {
             throw STD_ERRORS.AUTH_ERROR
         }
         options = {
-            headers: { Authorization: `Bearer ${accessToken}s`, ...headers },
+            headers: { Authorization: `Bearer ${accessToken}`, ...headers },
         }
         const jwt = jwt_decode(accessToken)
         userId = get(jwt, 'id', '')

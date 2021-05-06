@@ -1,5 +1,5 @@
 import { Command } from '@oclif/command'
-import queries, { getTeam } from '../helpers/queries'
+import queries from '../helpers/queries'
 import { STD_ERRORS, UPDATE_TYPES } from '../config'
 import cli from 'cli-ux'
 import { getTimeSince } from '../helpers/utils'

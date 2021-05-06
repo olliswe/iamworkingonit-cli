@@ -2,7 +2,7 @@ import { Command, flags } from '@oclif/command'
 import cli from 'cli-ux'
 import * as inquirer from 'inquirer'
 import { STD_ERRORS } from '../config'
-import queries, { addStatusUpdate, clearStatus } from '../helpers/queries'
+import queries from '../helpers/queries'
 
 export default class Status extends Command {
     static description = 'Update or clear your status'
@@ -29,7 +29,7 @@ export default class Status extends Command {
         if (flags.clear) {
             cli.action.start('Clearing your status')
 
-            const { data, error } = await clearStatus()
+            const { data, error } = await queries.clearStatus()
             if (error || !data) {
                 this.error(error || STD_ERRORS.OOPS_ERROR)
             }

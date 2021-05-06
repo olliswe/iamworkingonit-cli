@@ -1,7 +1,7 @@
 import { Command } from '@oclif/command'
 import cli from 'cli-ux'
-import { getMe, joinTeam } from '../helpers/queries'
 import { STD_ERRORS } from '../config'
+import queries from '../helpers/queries'
 
 export default class Join extends Command {
     static description = 'Join a team using an invite token'
@@ -19,7 +19,7 @@ Here's what you can do next:
     ]
 
     async run() {
-        const me = await getMe()
+        const me = await queries.getMe()
         if (me.error || !me.data) {
             this.error(me.error || STD_ERRORS.OOPS_ERROR)
         }
@@ -31,7 +31,7 @@ Here's what you can do next:
 
         const secret = await cli.prompt('Please enter the secret token')
         cli.action.start('Attempting to join team...')
-        const { data, error } = await joinTeam(secret)
+        const { data, error } = await queries.joinTeam(secret)
 
         if (error || !data) {
             this.error(error || STD_ERRORS.OOPS_ERROR)

@@ -1,5 +1,5 @@
 import { Command } from '@oclif/command'
-import { createTeam, getMe } from '../helpers/queries'
+import queries from '../helpers/queries'
 import { STD_ERRORS } from '../config'
 import cli from 'cli-ux'
 
@@ -9,7 +9,7 @@ export default class Create extends Command {
     static examples = [`$ workingon create`]
 
     async run() {
-        const { data, error } = await getMe()
+        const { data, error } = await queries.getMe()
         if (error || !data) {
             this.error(error || STD_ERRORS.OOPS_ERROR)
         }
@@ -21,7 +21,9 @@ export default class Create extends Command {
         const teamName = await cli.prompt('What is the team name?')
         cli.action.start('Creating your new team')
 
-        const { data: teamData, error: teamError } = await createTeam(teamName)
+        const { data: teamData, error: teamError } = await queries.createTeam(
+            teamName
+        )
 
         if (!teamData || teamError) {
             this.error(teamError || STD_ERRORS.OOPS_ERROR)

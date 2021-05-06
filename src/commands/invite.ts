@@ -1,5 +1,5 @@
 import { Command } from '@oclif/command'
-import { generateSecret, getMe } from '../helpers/queries'
+import queries from '../helpers/queries'
 import { STD_ERRORS } from '../config'
 import cli from 'cli-ux'
 
@@ -9,7 +9,7 @@ export default class Invite extends Command {
     static examples = [`$ workingon invite`]
 
     async run() {
-        const { data, error } = await getMe()
+        const { data, error } = await queries.getMe()
         if (error || !data) {
             this.error(error || STD_ERRORS.OOPS_ERROR)
         }
@@ -23,7 +23,9 @@ export default class Invite extends Command {
 
         cli.action.start('Sending invite email...')
 
-        const { data: genData, error: genError } = await generateSecret(email)
+        const { data: genData, error: genError } = await queries.generateSecret(
+            email
+        )
         if (genError || !genData) {
             this.error(genError || STD_ERRORS.OOPS_ERROR)
         }
